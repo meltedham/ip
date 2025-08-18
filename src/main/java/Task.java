@@ -1,33 +1,9 @@
-public class Task {
-    private String name;
-    private boolean done;
+public interface Task {
+    public abstract void Mark();
 
-    public Task(String name)
-    {
-        this.name = name;
-        this.done = false;
-    }
+    public abstract void Unmark();
 
-    public void Mark()
-    {
-        this.done = true;
-    }
+    public abstract String Name(Todo task);
 
-    public void Unmark()
-    {
-        this.done = false;
-    }
-
-    public String toString()
-    {
-        String tick = "";
-        if (this.done)
-        {
-            tick = "[X]";
-        } else {
-            tick = "[ ]";
-        }
-        String line = tick + " " + this.name;
-        return line;
-    }
+    public abstract String toString();
 }
