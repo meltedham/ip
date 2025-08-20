@@ -18,11 +18,11 @@ public class Meat {
                 for (int i = 0; i < list.size(); i++) {
                     System.out.println(i + 1 + ". " + list.get(i).toString());
                 }
-            } else { //input = mark/unmark/task name/other
+            } else { //input = mark/unmark/task name/other/delete
                 String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
                 if (words.length == 1) {
-                    if (words[0].equals("mark") || words[0].equals("unmark")) {
-                        System.out.printf(":( The task number for %s cannot be empty :(\n", input);
+                    if (words[0].equals("mark") || words[0].equals("unmark") || words[0].equals("delete")) {
+                        System.out.printf(":( The task number to %s cannot be empty :(\n", input);
                     } else if (words[0].equals("todo") || words[0].equals("deadline") || words[0].equals("event")) {
                         System.out.printf(":( There must be a description for a %s :(\n", input);
                     } else {
@@ -36,17 +36,24 @@ public class Meat {
                 } else {
                     if (words[0].equals("mark")) {
                         int taskNum = Integer.parseInt(words[1]); //converts the number string to int
-                        Task task = list.get(taskNum - 1);
-                        task.Mark(); //mark the corresponding task as done
-                        System.out.println("Nice! I've marked this task as done:");
-                        System.out.println(task.toString());
-
+                        if (list.size() < taskNum || taskNum < 1) {
+                            System.out.println(":( Invalid task number :(.");
+                        } else {
+                            Task task = list.get(taskNum - 1);
+                            task.Mark(); //mark the corresponding task as done
+                            System.out.println("Nice! I've marked this task as done:");
+                            System.out.println(task.toString());
+                        }
                     } else if (words[0].equals("unmark")) {
                         int taskNum = Integer.parseInt(words[1]); //converts the number string to int
-                        Task task = list.get(taskNum - 1);
-                        task.Unmark(); //mark the corresponding task as done
-                        System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println(task.toString());
+                        if (list.size() < taskNum || taskNum < 1) {
+                            System.out.println(":( Invalid task number :(.");
+                        } else {
+                            Task task = list.get(taskNum - 1);
+                            task.Unmark(); //mark the corresponding task as done
+                            System.out.println("OK, I've marked this task as not done yet:");
+                            System.out.println(task.toString());
+                        }
                     } else if (words[0].equals("todo")) { //task name
                         Todo todo = new Todo(words[1]);
                         list.add(todo);
@@ -86,6 +93,16 @@ public class Meat {
                                 System.out.println(event.toString());
                                 System.out.printf("Now you have %d tasks in the list.\n", list.size());
                             }
+                        }
+                    } else if (words[0].equals("delete")) {
+                        int taskNum = Integer.parseInt(words[1]);
+                        if (list.size() < taskNum || taskNum < 1) {
+                            System.out.println(":( Invalid task number :(.");
+                        } else {
+                            System.out.println("Got it. I've removed this task:");
+                            System.out.println(list.get(taskNum - 1).toString());
+                            list.remove(taskNum - 1);
+                            System.out.printf("Now you have %d tasks in the list.\n", list.size());
                         }
                     } else { //more than 1 word but invalid
                         System.out.println(":( Not a valid command :(. Uses:");
