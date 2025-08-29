@@ -11,12 +11,12 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class FileEditor {
+public class Storage {
     //for reading/writing a file
     private File file; //file object
     private String path;
 
-    public FileEditor(String path)
+    public Storage(String path)
     {
         this.path = path;
         this.file = new File(this.path);
@@ -66,10 +66,10 @@ public class FileEditor {
         }
     }
 
-    public void modifyFile(ArrayList<Task> list) {
+    public void modifyFile(Tasklist taskList) {
         this.clearFile();
-        for (int i = 0; i < list.size(); i++) {
-            this.appendFile(list.get(i));
+        for (int i = 0; i < taskList.taskCount(); i++) {
+            this.appendFile(taskList.getTask(i));
         }
     }
 
