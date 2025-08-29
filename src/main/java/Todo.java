@@ -15,26 +15,38 @@ public class Todo implements Task {
         this.done = false;
     }
 
-    public String Name(Todo task) {
-        String tick = "";
+    public String Type() {
         String TED = "";
-        if (task.done)
+        if (this instanceof Event) {
+            TED = "[E]";
+        } else if (this instanceof Deadline) {
+            TED = "[D]";
+        } else {
+            TED = "[T]";
+        }
+        return TED;
+    }
+
+    public String Marked() {
+        String tick = "";
+        if (this.done)
         {
             tick = "[X]";
         } else {
             tick = "[ ]";
         }
-        if (task instanceof Event) {
-            TED = "[E]";
-        } else if (task instanceof Deadline) {
-            TED = "[D]";
-        } else {
-            TED = "[T]";
-        }
-        return TED + tick + " " + this.name;
+        return tick;
+    }
+
+    public String Name() {
+        return this.name;
     }
 
     public String toString() {
-        return this.Name(this);
+        return this.Type() + this.Marked() + " " + this.Name();
+    }
+
+    public String toFile() {
+        return this.Type() + "|" + this.Marked() + "|" + this.name;
     }
 }

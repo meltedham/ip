@@ -1,18 +1,27 @@
-public class Deadline extends Todo {
-    private String end;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String name, String end) {
+public class Deadline extends Todo {
+    //private String end;
+    private LocalDateTime end;
+
+    public Deadline(String name, LocalDateTime end) {
         super(name);
         this.end = end;
     }
 
     public String End() {
-        return this.end;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return this.end.format(formatter);
     }
 
     @Override
     public String toString() {
-        String line = Name(this) + "(by: " + this.end + ")";
-        return line;
+        return Type() + Marked() + " " + Name() + "(by: " + this.End() + ")";
+    }
+
+    @Override
+    public String toFile() {
+        return Type() + "|" + Marked() + "|" + Name() + "|" + this.End();
     }
 }

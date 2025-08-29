@@ -1,14 +1,26 @@
-public class Event extends Deadline {
-    private String start;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Event(String name, String end, String start) {
+public class Event extends Deadline {
+    private LocalDateTime start;
+
+    public Event(String name, LocalDateTime end, LocalDateTime start) {
         super(name, end);
         this.start = start;
     }
 
+    public String Start() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return this.start.format(formatter);
+    }
+
     @Override
     public String toString() {
-        String line = Name(this) + "(from: " + this.start + "to: " + End() + ")";
-        return line;
+        return Type() + Marked() + " " + Name() + "(from: " + this.Start() + " " + "to: " + End() + ")";
+    }
+
+    @Override
+    public String toFile() {
+        return Type() + "|" + Marked() + "|" + Name() + "|" + End() + "|" + this.Start();
     }
 }
