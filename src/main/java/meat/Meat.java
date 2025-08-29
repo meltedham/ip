@@ -11,7 +11,8 @@ import java.util.Scanner;
 
 public class Meat {
     public static void main(String[] args) {
-        Storage storage = new Storage("meat/meat.txt");
+        Storage storage = new Storage("resources/meat.txt");
+
         ArrayList<Task> list = new ArrayList<>();
         Tasklist taskList = new Tasklist(list);
         Ui ui = new Ui(taskList);

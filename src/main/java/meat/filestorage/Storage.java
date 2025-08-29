@@ -92,6 +92,8 @@ public class Storage {
 
     public void fileToList(ArrayList<Task> list) {
         try {
+            System.out.println("Working directory: " + System.getProperty("user.dir"));
+
             Path path = Paths.get(this.path);
             List<String> stringList = Files.readAllLines(path);
             for (int i = 0; i < stringList.size(); i++) {
@@ -129,7 +131,8 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Couldn't read file");
+            System.out.println("Couldn't read file" + e.getMessage());
+            this.createActualFile();
         }
     }
 
