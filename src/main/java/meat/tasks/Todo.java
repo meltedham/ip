@@ -1,3 +1,5 @@
+package meat.tasks;
+
 public class Todo implements Task {
     private final String name;
     private boolean done;

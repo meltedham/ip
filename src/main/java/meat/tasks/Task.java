@@ -1,3 +1,5 @@
+package meat.tasks;
+
 public interface Task {
     public abstract void Mark();
 

@@ -1,9 +1,17 @@
+package meat;
+
+import meat.filestorage.Storage;
+import meat.inputoutput.Parser;
+import meat.inputoutput.Ui;
+import meat.tasks.Task;
+import meat.tasks.Tasklist;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Meat {
     public static void main(String[] args) {
-        Storage storage = new Storage("meat.txt");
+        Storage storage = new Storage("meat/meat.txt");
         ArrayList<Task> list = new ArrayList<>();
         Tasklist taskList = new Tasklist(list);
         Ui ui = new Ui(taskList);

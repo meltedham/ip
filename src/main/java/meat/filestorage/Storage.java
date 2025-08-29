@@ -1,3 +1,11 @@
+package meat.filestorage;
+
+import meat.tasks.Tasklist;
+import meat.tasks.Deadline;
+import meat.tasks.Event;
+import meat.tasks.Task;
+import meat.tasks.Todo;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

@@ -1,3 +1,5 @@
+package meat.tasks;
+
 import java.util.ArrayList;
 
 public class Tasklist {
