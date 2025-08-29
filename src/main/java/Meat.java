@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class Meat {
     public static void main(String[] args) {
+        FileEditor fileEditor = new FileEditor("meat.txt");
+        //fileEditor.clearFile();
         String name = "Meat";
         System.out.println("Hello! I'm " + name);
         System.out.println("What can I do for you?\n");
@@ -15,9 +17,7 @@ public class Meat {
             String str = "";
             if (input.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < list.size(); i++) {
-                    System.out.println(i + 1 + ". " + list.get(i).toString());
-                }
+                fileEditor.printFile();
             } else { //input = mark/unmark/task name/other/delete
                 String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
                 if (words.length == 1) {
@@ -43,6 +43,7 @@ public class Meat {
                             task.Mark(); //mark the corresponding task as done
                             System.out.println("Nice! I've marked this task as done:");
                             System.out.println(task.toString());
+                            fileEditor.modifyFile(list);
                         }
                     } else if (words[0].equals("unmark")) {
                         int taskNum = Integer.parseInt(words[1]); //converts the number string to int
@@ -53,12 +54,14 @@ public class Meat {
                             task.Unmark(); //mark the corresponding task as done
                             System.out.println("OK, I've marked this task as not done yet:");
                             System.out.println(task.toString());
+                            fileEditor.modifyFile(list);
                         }
                     } else if (words[0].equals("todo")) { //task name
                         Todo todo = new Todo(words[1]);
                         list.add(todo);
                         System.out.println("Got it. I've added this task:");
                         System.out.println(todo.toString());
+                        fileEditor.appendFile(todo.toString());
                         System.out.printf("Now you have %d tasks in the list.\n", list.size());
 
                     } else if (words[0].equals("deadline")) {
@@ -74,6 +77,7 @@ public class Meat {
                                 list.add(deadline);
                                 System.out.println("Got it. I've added this task:");
                                 System.out.println(deadline.toString());
+                                fileEditor.appendFile(deadline.toString());
                                 System.out.printf("Now you have %d tasks in the list.\n", list.size());
                             }
                         }
@@ -91,6 +95,7 @@ public class Meat {
                                 list.add(event);
                                 System.out.println("Got it. I've added this task:");
                                 System.out.println(event.toString());
+                                fileEditor.appendFile(event.toString());
                                 System.out.printf("Now you have %d tasks in the list.\n", list.size());
                             }
                         }
@@ -102,6 +107,7 @@ public class Meat {
                             System.out.println("Got it. I've removed this task:");
                             System.out.println(list.get(taskNum - 1).toString());
                             list.remove(taskNum - 1);
+                            fileEditor.modifyFile(list);
                             System.out.printf("Now you have %d tasks in the list.\n", list.size());
                         }
                     } else { //more than 1 word but invalid
