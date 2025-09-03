@@ -50,83 +50,83 @@ public class Parser {
     public void checkAnyValid(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
         switch (words[0]) {
-            case "list":
-                if (input.equals("list")) {
-                    this.ui.list();
-                }
-                break;
-            case "mark":
-                if (this.MUDValid(input)) {
-                    int taskNum = Integer.parseInt(words[1]);
+        case "list":
+            if (input.equals("list")) {
+                this.ui.list();
+            }
+            break;
+        case "mark":
+            if (this.isMarkUnmarkDeleteValid(input)) {
+                int taskNum = Integer.parseInt(words[1]);
 
-                    this.taskList.Mark(taskNum);
-                    this.ui.Mark(taskNum);
-                    storage.modifyFile(this.taskList);
-                }
-                break;
-            case "unmark":
-                if (this.MUDValid(input)) {
-                    int taskNum = Integer.parseInt(words[1]);
+                this.taskList.Mark(taskNum);
+                this.ui.Mark(taskNum);
+                storage.modifyFile(this.taskList);
+            }
+            break;
+        case "unmark":
+            if (this.isMarkUnmarkDeleteValid(input)) {
+                int taskNum = Integer.parseInt(words[1]);
 
-                    this.taskList.Unmark(taskNum);
-                    this.ui.Unmark(taskNum);
-                    storage.modifyFile(this.taskList);
-                }
-                break;
-            case "delete":
-                if (this.MUDValid(input)) {
-                    int taskNum = Integer.parseInt(words[1]);
+                this.taskList.Unmark(taskNum);
+                this.ui.Unmark(taskNum);
+                storage.modifyFile(this.taskList);
+            }
+            break;
+        case "delete":
+            if (this.isMarkUnmarkDeleteValid(input)) {
+                int taskNum = Integer.parseInt(words[1]);
 
-                    this.ui.Delete(taskNum);
-                    this.taskList.Delete(taskNum);
-                    this.ui.taskCount();
-                    storage.modifyFile(this.taskList);
-                }
-                break;
-            case "todo":
-                if (this.todoValid(input)) {
-                    Todo todo = new Todo(words[1].trim());
+                this.ui.Delete(taskNum);
+                this.taskList.Delete(taskNum);
+                this.ui.taskCount();
+                storage.modifyFile(this.taskList);
+            }
+            break;
+        case "todo":
+            if (this.isTodoValid(input)) {
+                Todo todo = new Todo(words[1].trim());
 
-                    this.taskList.Add(todo);
-                    this.ui.Add(todo);
-                    this.storage.appendFile(todo);
-                }
-                break;
-            case "deadline":
-                if (this.deadlineValid(input)) {
-                    String[] parts = words[1].split("/"); //split after the /
-                    String[] time = parts[1].split(": ");
-                    if (this.dateValid(time[1])) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
-                        Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
+                this.taskList.Add(todo);
+                this.ui.Add(todo);
+                this.storage.appendFile(todo);
+            }
+            break;
+        case "deadline":
+            if (this.isDeadlineValid(input)) {
+                String[] parts = words[1].split("/"); //split after the /
+                String[] time = parts[1].split(": ");
+                if (this.isDateValid(time[1])) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                    LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+                    Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
 
-                        this.taskList.Add(deadline);
-                        this.ui.Add(deadline);
-                        this.storage.appendFile(deadline);
-                    }
+                    this.taskList.Add(deadline);
+                    this.ui.Add(deadline);
+                    this.storage.appendFile(deadline);
                 }
-                break;
-            case "event":
-                if (this.eventValid(input)) {
-                    String[] parts = words[1].split("/"); //split after the /
-                    String[] start = parts[1].split(": ");
-                    String[] end = parts[2].split(": ");
-                    if (this.dateValid(end[1]) && this.dateValid(start[1].stripTrailing())) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
-                        LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
-                        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
+            }
+            break;
+        case "event":
+            if (this.isEventValid(input)) {
+                String[] parts = words[1].split("/"); //split after the /
+                String[] start = parts[1].split(": ");
+                String[] end = parts[2].split(": ");
+                if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                    LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
+                    LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
+                    Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
 
-                        this.taskList.Add(event);
-                        this.ui.Add(event);
-                        this.storage.appendFile(event);
-                    }
+                    this.taskList.Add(event);
+                    this.ui.Add(event);
+                    this.storage.appendFile(event);
                 }
-                break;
-            default:
-                this.ui.Commands();
-                break;
+            }
+            break;
+        default:
+            this.ui.Commands();
+            break;
         }
     }
 
@@ -136,7 +136,7 @@ public class Parser {
      * @param input the command string
      * @return true if valid, false otherwise
      */
-    public boolean MUDValid(String input) {
+    public boolean isMarkUnmarkDeleteValid(String input) {
         String[] words = input.split(" ");
         if (words.length == 1) {
             this.ui.noTaskNum();
@@ -163,7 +163,7 @@ public class Parser {
      * @param input the command string
      * @return true if valid, else false
      */
-    public boolean todoValid(String input) {
+    public boolean isTodoValid(String input) {
         String[] words = input.split(" ");
         if (words.length == 1) {
             this.ui.noTaskDesc();
@@ -179,7 +179,7 @@ public class Parser {
      * @param input the command string
      * @return true if valid, else false
      */
-    public boolean deadlineValid(String input) {
+    public boolean isDeadlineValid(String input) {
         String[] split = input.split(" ", 2);
         if (split.length == 1) { //if no task description
             this.ui.noTaskDesc();
@@ -207,7 +207,7 @@ public class Parser {
      * @param input the command string
      * @return true if valid, else false
      */
-    public boolean eventValid (String input) {
+    public boolean isEventValid (String input) {
         String[] words = input.split(" ", 2);
         if (words.length == 1) {
             this.ui.noTaskDesc();
@@ -236,7 +236,7 @@ public class Parser {
      * @param date the date string
      * @return true if valid, else false
      */
-    public boolean dateValid(String date) {
+    public boolean isDateValid(String date) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
             LocalDateTime dateTime = LocalDateTime.parse(date, formatter);

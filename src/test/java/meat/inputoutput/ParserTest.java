@@ -12,7 +12,9 @@ import meat.tasks.Tasklist;
 
 import java.util.ArrayList;
 
-/** Junit test class for the Parser class */
+/**
+ * Junit test class for the Parser class
+ * */
 public class ParserTest {
 
     /** Tests parsing and adding a Todo task. */
@@ -22,7 +24,9 @@ public class ParserTest {
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
         Parser parser = new Parser(ui, taskList, storage);
+
         parser.checkAnyValid("todo Read Book");
+
         assertEquals(1, taskList.taskCount());
         assertEquals("Read Book", taskList.getTask(0).Name());
         assertEquals(true, taskList.getTask(0) instanceof Todo);
@@ -35,7 +39,9 @@ public class ParserTest {
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
         Parser parser = new Parser(ui, taskList, storage);
+
         parser.checkAnyValid("deadline Submit report /by: 05.09.2025 18:30");
+
         assertEquals(1, taskList.taskCount());
         assertEquals("Submit report", taskList.getTask(0).Name());
         assertEquals("05.09.2025 18:30", ((Deadline) taskList.getTask(0)).End());
@@ -49,7 +55,9 @@ public class ParserTest {
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
         Parser parser = new Parser(ui, taskList, storage);
+
         parser.checkAnyValid("event Meeting /from: 05.09.2025 09:00 /to: 05.09.2025 17:00");
+
         assertEquals(1, taskList.taskCount());
         assertEquals("Meeting", taskList.getTask(0).Name());
         assertEquals("05.09.2025 09:00", ((Event) taskList.getTask(0)).Start());
@@ -66,9 +74,11 @@ public class ParserTest {
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
         Parser parser = new Parser(ui, taskList, storage);
+
         parser.checkAnyValid("todo Test task");
-        assertEquals(false, parser.MUDValid("mark 0"));
-        assertEquals(true, parser.MUDValid("mark 1"));
+
+        assertEquals(false, parser.isMarkUnmarkDeleteValid("mark 0"));
+        assertEquals(true, parser.isMarkUnmarkDeleteValid("mark 1"));
     }
 
     /**
@@ -80,6 +90,7 @@ public class ParserTest {
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
         Parser parser = new Parser(ui, taskList, storage);
-        assertEquals(false, parser.dateValid("31-02-2025 25:00")); // clearly invalid
+
+        assertEquals(false, parser.isDateValid("31-02-2025 25:00")); // clearly invalid
     }
 }
