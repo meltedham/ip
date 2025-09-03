@@ -61,7 +61,7 @@ public class Parser {
                 break;
             case "todo":
                 if (this.todoValid(input)) {
-                    Todo todo = new Todo(words[1]);
+                    Todo todo = new Todo(words[1].trim());
 
                     this.taskList.Add(todo);
                     this.ui.Add(todo);
@@ -74,8 +74,8 @@ public class Parser {
                     String[] time = parts[1].split(": ");
                     if (this.dateValid(time[1])) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(time[1], formatter);
-                        Deadline deadline = new Deadline(parts[0], endDateTime);
+                        LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+                        Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
 
                         this.taskList.Add(deadline);
                         this.ui.Add(deadline);
@@ -90,9 +90,9 @@ public class Parser {
                     String[] end = parts[2].split(": ");
                     if (this.dateValid(end[1]) && this.dateValid(start[1].stripTrailing())) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(end[1], formatter);
-                        LocalDateTime startDateTime = LocalDateTime.parse(start[1].stripTrailing(), formatter);
-                        Event event = new Event(parts[0], endDateTime, startDateTime);
+                        LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
+                        LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
+                        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
 
                         this.taskList.Add(event);
                         this.ui.Add(event);
