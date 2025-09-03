@@ -2,9 +2,13 @@ package meat.tasks;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 
+/** Junit test class for the Deadline class */
 public class DeadlineTest {
+
+    /** Tests that the task name, type, and end date/time are correct. */
     @Test
     void testEndType() {
         LocalDateTime deadlineTime = LocalDateTime.of(2025, 9, 5, 18, 30);
@@ -14,6 +18,7 @@ public class DeadlineTest {
         assertEquals("05.09.2025 18:30", deadline.End());
     }
 
+    /** Tests the string and file representation of a Deadline task. */
     @Test
     void testToStringToFile() {
         LocalDateTime deadlineTime = LocalDateTime.of(2025, 9, 5, 18, 30);

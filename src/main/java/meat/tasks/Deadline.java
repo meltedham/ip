@@ -3,25 +3,53 @@ package meat.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task with a deadline.
+ * Extends Todo by adding an end date and time.
+ */
 public class Deadline extends Todo {
-    //private String end;
+
+    /** The end date and time of the deadline. */
     private LocalDateTime end;
 
+    /**
+     * Constructs a Deadline with a name and end date/time.
+     *
+     * @param name the name of the task
+     * @param end  the LocalDateTime representing the deadline
+     */
     public Deadline(String name, LocalDateTime end) {
         super(name);
         this.end = end;
     }
 
+    /**
+     * Returns the end date and time formatted as "dd.MM.yyyy HH:mm".
+     *
+     * @return the formatted end date/time
+     */
     public String End() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return this.end.format(formatter);
     }
 
+    /**
+     * Returns a string representation of the Deadline, with its
+     * type, marked status, name, and formatted end date/time.
+     *
+     * @return string representation of the Deadline
+     */
     @Override
     public String toString() {
         return Type() + Marked() + " " + Name() + "(by: " + this.End() + ")";
     }
 
+    /**
+     * Returns a string representation of the Deadline for file storage.
+     * Format: type|marked|name|endDateTime
+     *
+     * @return string for file storage
+     */
     @Override
     public String toFile() {
         return Type() + "|" + Marked() + "|" + Name() + "|" + this.End();

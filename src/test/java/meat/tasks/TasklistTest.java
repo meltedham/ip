@@ -2,10 +2,15 @@ package meat.tasks;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 
+/** JUnit test class for the Tasklist class */
 public class TasklistTest {
+
+    /** Tests adding a task to the Tasklist and checking task count. */
     @Test
     void testAddTaskCount() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -15,6 +20,8 @@ public class TasklistTest {
         assertEquals(todo, taskList.getTask(0));
     }
 
+    /**
+     * Tests deleting a task from the Tasklist and checking task count. */
     @Test
     void testDeleteTaskCount() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -28,6 +35,7 @@ public class TasklistTest {
         assertEquals(todo2, taskList.getTask(0));
     }
 
+    /** Tests marking and unmarking a task in the Tasklist. */
     @Test
     void testMarkUnmark() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -40,6 +48,7 @@ public class TasklistTest {
         assertEquals("[ ]", todo.Marked());
     }
 
+    /** Tests retrieving a task by index from the Tasklist. */
     @Test
     void testGet() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -48,6 +57,10 @@ public class TasklistTest {
         assertEquals(todo, taskList.getTask(0));
     }
 
+    /**
+     * Tests adding different types of tasks to the Tasklist,
+     * checking the type of each task and task count.
+     */
     @Test
     void testAddTaskTypes() {
         Tasklist taskList = new Tasklist(new ArrayList<>());

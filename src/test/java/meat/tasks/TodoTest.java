@@ -3,7 +3,10 @@ package meat.tasks;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** JUnit test class for the Todo class. */
 public class TodoTest {
+
+    /** Tests that the name and type of a Todo are correct. */
     @Test
     void testNameType() {
     Todo todo = new Todo("Read book");
@@ -11,6 +14,7 @@ public class TodoTest {
     assertEquals("[T]", todo.Type());
     }
 
+    /** Tests marking and unmarking a Todo task. */
     @Test
     void testMarkUnmark() {
         Todo todo = new Todo("Read book");
@@ -21,6 +25,7 @@ public class TodoTest {
         assertEquals("[ ]", todo.Marked());
     }
 
+    /** Tests the string and file representations of a Todo. */
     @Test
     void testToStringToFile() {
         Todo todo = new Todo("Walk dog");

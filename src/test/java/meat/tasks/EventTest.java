@@ -2,9 +2,13 @@ package meat.tasks;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 
+/** JUnit test class for the Event class */
 public class EventTest {
+
+    /** Tests that the task name, type, start, and end date/time are correct. */
     @Test
     void testStartEndAndType() {
         LocalDateTime startTime = LocalDateTime.of(2025, 9, 5, 9, 0);
@@ -16,6 +20,9 @@ public class EventTest {
         assertEquals("05.09.2025 17:00", event.End());
     }
 
+    /** Tests the string and file representation of an Event task,
+     * and marking the task as done.
+     */
     @Test
     void testToStringAndToFile() {
         LocalDateTime startTime = LocalDateTime.of(2025, 9, 5, 9, 0);
