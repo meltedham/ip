@@ -7,29 +7,44 @@ import meat.tasks.Task;
 import meat.tasks.Todo;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * For reading from and writing to a storage file for tasks.
+ * Responsible for creating, modifying, appending, clearing, and
+ * transferring tasks from a file.
+ */
 public class Storage {
-    //for reading/writing a file
+
+    /** File object representing the storage file. */
     private File file; //file object
+
+    /** Path to the storage file. */
     private String path;
 
+    /**
+     * Constructs a Storage for the given path.
+     *
+     * @param path the file path to store tasks
+     */
     public Storage(String path)
     {
         this.path = path;
         this.file = new File(this.path);
     }
 
+    /** Creates the actual file if it does not exist. */
     public void createActualFile() {
         try {
             this.file.createNewFile();
@@ -38,20 +53,11 @@ public class Storage {
         }
     }
 
-    public void printFile() {
-        try {
-            Scanner scanner = new Scanner(this.file);
-            int taskNum = 1;
-            while (scanner.hasNext()) {
-                System.out.println(taskNum + ". " + scanner.nextLine());
-                taskNum++;
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found, creating it");
-            this.createActualFile();
-        }
-    }
-
+    /**
+     * Writes a task to the file, overwriting any existing content.
+     *
+     * @param task the task to write
+     */
     public void writeFile(Task task) {
         try {
             String textToAdd = task.toFile();
@@ -63,6 +69,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Appends a task to the end of the file, preserving previous content.
+     *
+     * @param task the task to append
+     */
     public void appendFile(Task task) {
         try {
             String textToAppend = task.toFile();
@@ -74,6 +85,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Updates the file to match the current Tasklist.
+     * Clears the file first and writes all tasks in order.
+     *
+     * @param taskList the task list to save
+     */
     public void modifyFile(Tasklist taskList) {
         this.clearFile();
         for (int i = 0; i < taskList.taskCount(); i++) {
@@ -81,6 +98,7 @@ public class Storage {
         }
     }
 
+    /** Clears all content in the storage file. */
     public void clearFile() {
         try {
             FileWriter fileWriter = new FileWriter(this.path, false);
@@ -90,6 +108,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the file into the list.
+     *
+     * @param list the list to add the tasks from the file
+     */
     public void fileToList(ArrayList<Task> list) {
         try {
             System.out.println("Working directory: " + System.getProperty("user.dir"));

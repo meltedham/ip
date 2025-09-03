@@ -1,14 +1,21 @@
 package meat;
 
 import meat.filestorage.Storage;
+
 import meat.inputoutput.Parser;
 import meat.inputoutput.Ui;
+
 import meat.tasks.Task;
 import meat.tasks.Tasklist;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Main class to run Meat.
+ * Initializes storage, task list, UI, and parser, then
+ * runs a loop until the user exits with "bye".
+ */
 public class Meat {
     public static void main(String[] args) {
         Storage storage = new Storage("resources/meat.txt");

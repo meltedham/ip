@@ -2,19 +2,26 @@ package meat.filestorage;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import meat.tasks.Todo;
 import meat.tasks.Deadline;
 import meat.tasks.Tasklist;
 import meat.tasks.Task;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 
+/** JUnit test class for the Storage class */
 public class StorageTest {
 
+    /** Path to file created for testing. */
     private static final String TEST_FILE = "test_storage.txt";
 
+    /** Tests creating and clearing of a file. */
     @Test
     void testCreateClearFile() throws IOException {
         Storage storage = new Storage(TEST_FILE);
@@ -26,6 +33,9 @@ public class StorageTest {
         file.delete();
     }
 
+    /**
+     * Tests writing a task to the file and reading it back into a list.
+     */
     @Test
     void testWriteFileFileToList() throws IOException {
         Storage storage = new Storage(TEST_FILE);
@@ -40,6 +50,9 @@ public class StorageTest {
         new File(TEST_FILE).delete();
     }
 
+    /**
+     * Tests appending multiple tasks to a file and reading them back.
+     */
     @Test
     void testAppendFile() throws IOException {
         Storage storage = new Storage(TEST_FILE);
@@ -56,6 +69,9 @@ public class StorageTest {
         new File(TEST_FILE).delete();
     }
 
+    /**
+     * Tests modifying a file to reflect a Tasklist with multiple task types.
+     */
     @Test
     void testModifyFile() throws IOException {
         Storage storage = new Storage(TEST_FILE);

@@ -2,14 +2,20 @@ package meat.inputoutput;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import meat.filestorage.Storage;
+
 import meat.tasks.Todo;
 import meat.tasks.Deadline;
 import meat.tasks.Event;
 import meat.tasks.Tasklist;
+
 import java.util.ArrayList;
 
+/** Junit test class for the Parser class */
 public class ParserTest {
+
+    /** Tests parsing and adding a Todo task. */
     @Test
     void testTodo() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -22,6 +28,7 @@ public class ParserTest {
         assertEquals(true, taskList.getTask(0) instanceof Todo);
     }
 
+    /** Tests parsing and adding a Deadline task. */
     @Test
     void testDeadline() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -35,6 +42,7 @@ public class ParserTest {
         assertEquals(true, taskList.getTask(0) instanceof Deadline);
     }
 
+    /** Tests parsing and adding an Event task. */
     @Test
     void testEvent() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -49,6 +57,9 @@ public class ParserTest {
         assertEquals(true, taskList.getTask(0) instanceof Event);
     }
 
+    /**
+     * Tests the method that checks for valid mark/unmark/delete command.
+     */
     @Test
     void testMUDValid() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
@@ -60,6 +71,9 @@ public class ParserTest {
         assertEquals(true, parser.MUDValid("mark 1"));
     }
 
+    /**
+     * Tests the method that checks for valid date/time formatting.
+     */
     @Test
     void testInvalidDate() {
         Tasklist taskList = new Tasklist(new ArrayList<>());

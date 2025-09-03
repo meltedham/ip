@@ -1,5 +1,9 @@
 package meat.tasks;
 
+/**
+ * Interface for tasks. Todo implements Task.
+ *
+ */
 public interface Task {
     public abstract void Mark();
 

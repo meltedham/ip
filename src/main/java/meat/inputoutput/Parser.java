@@ -1,6 +1,7 @@
 package meat.inputoutput;
 
 import meat.filestorage.Storage;
+
 import meat.tasks.Deadline;
 import meat.tasks.Event;
 import meat.tasks.Tasklist;
@@ -10,19 +11,42 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Parses and validates user input commands for tasks.
+ * Handles commands like adding, marking, unmarking, deleting, and listing tasks.
+ * Interacts with Ui for output, Tasklist for task management, and Storage for saving to file.
+ */
 public class Parser {
-    //checks if input is valid and returns it if it is
 
+    /** User interface object for displaying messages. */
     private Ui ui;
+
+    /** The task list managed by this parser. */
     private Tasklist taskList;
+
+    /** Storage object for reading/writing tasks to file. */
     private Storage storage;
 
+    /**
+     * Constructs a Parser with the specified Ui, Tasklist, and Storage.
+     *
+     * @param ui the Ui object for displaying messages
+     * @param taskList the Tasklist object for managing tasks
+     * @param storage the Storage object for file operations
+     */
     public Parser(Ui ui, Tasklist taskList, Storage storage) {
         this.ui = ui;
         this.taskList = taskList;
         this.storage = storage;
     }
 
+    /**
+     * Checks if user input is valid, and executes it if it is,
+     * updating the list and file and printing the output accordingly.
+     * If not valid, uses Ui to print error messages.
+     *
+     * @param input the user input command string
+     */
     public void checkAnyValid(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
         switch (words[0]) {
@@ -106,6 +130,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks if the input is a valid mark, unmark, or delete command.
+     *
+     * @param input the command string
+     * @return true if valid, false otherwise
+     */
     public boolean MUDValid(String input) {
         String[] words = input.split(" ");
         if (words.length == 1) {
@@ -127,6 +157,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks if the input is a valid todo command.
+     *
+     * @param input the command string
+     * @return true if valid, else false
+     */
     public boolean todoValid(String input) {
         String[] words = input.split(" ");
         if (words.length == 1) {
@@ -137,6 +173,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks if the input is a valid deadline command.
+     *
+     * @param input the command string
+     * @return true if valid, else false
+     */
     public boolean deadlineValid(String input) {
         String[] split = input.split(" ", 2);
         if (split.length == 1) { //if no task description
@@ -159,6 +201,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks if the input is a valid event command.
+     *
+     * @param input the command string
+     * @return true if valid, else false
+     */
     public boolean eventValid (String input) {
         String[] words = input.split(" ", 2);
         if (words.length == 1) {
@@ -182,6 +230,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates if a date string is in the correct format "dd.MM.yyyy HH:mm".
+     *
+     * @param date the date string
+     * @return true if valid, else false
+     */
     public boolean dateValid(String date) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
