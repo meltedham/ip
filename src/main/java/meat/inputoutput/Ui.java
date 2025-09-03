@@ -126,5 +126,19 @@ public class Ui {
         System.out.println("deadline <description> /by DD.MM.YYYY hh:mm");
         System.out.println("event <description> /from DD.MM.YYYY hh:mm /to DD.MM.YYYY hh:mm");
     }
+
+    /**
+     * Displays a header message before the list of tasks containing keyword is printed.
+     */
+    public void Find() {
+        System.out.println("Here are the matching tasks in your list:");
+    }
+
+    /**
+     * Informs the user of invalid find syntax.
+     */
+    public void findInvalid() {
+        System.out.println("Provide a keyword to search by >:(");
+    }
 }
 

@@ -99,4 +99,18 @@ public class Todo implements Task {
     public String toFile() {
         return this.Type() + "|" + this.Marked() + "|" + this.name;
     }
+
+    /**
+     * Checks if the task name contains the keyword.
+     *
+     * @param keyword the keyword to search by
+     * @return true if the name contains the keyword, else false
+     */
+    public boolean hasKeyword(String keyword) {
+        if (this.name.contains(keyword)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

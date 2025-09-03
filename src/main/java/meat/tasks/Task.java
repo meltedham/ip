@@ -17,4 +17,6 @@ public interface Task {
     public abstract String toString();
 
     public abstract String toFile();
+
+    public abstract boolean hasKeyword(String keyword);
 }

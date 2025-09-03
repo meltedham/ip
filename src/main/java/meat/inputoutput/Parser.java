@@ -124,6 +124,13 @@ public class Parser {
                 }
             }
             break;
+        case "find":
+            if (this.isFindValid(input)) {
+                String keyword = words[1].trim();
+                this.ui.Find();
+                this.taskList.printByKeyword(keyword);
+            }
+            break;
         default:
             this.ui.Commands();
             break;
@@ -244,6 +251,22 @@ public class Parser {
         } catch (DateTimeException e) {
             this.ui.dateInvalid();
             return false;
+        }
+    }
+
+    /**
+     * Checks if the input is a valid find command.
+     *
+     * @param input the command string
+     * @return true if valid, else false
+     */
+    public boolean isFindValid(String input) {
+        String[] words = input.split(" ", 2);
+        if (words.length == 1) {
+            this.ui.findInvalid();
+            return false;
+        } else {
+            return true;
         }
     }
 }

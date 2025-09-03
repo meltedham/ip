@@ -69,7 +69,7 @@ public class ParserTest {
      * Tests the method that checks for valid mark/unmark/delete command.
      */
     @Test
-    void testMUDValid() {
+    void testIsMarkUnmarkDeleteValid() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");
@@ -85,7 +85,7 @@ public class ParserTest {
      * Tests the method that checks for valid date/time formatting.
      */
     @Test
-    void testInvalidDate() {
+    void testIsInvalidDate() {
         Tasklist taskList = new Tasklist(new ArrayList<>());
         Ui ui = new Ui(taskList);
         Storage storage = new Storage("test.txt");

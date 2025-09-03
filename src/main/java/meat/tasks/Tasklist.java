@@ -93,4 +93,20 @@ public class Tasklist {
     public void printTask(int taskNum) {
         System.out.println(this.list.get(taskNum - 1).toString());
     }
+
+    /**
+     * Finds and prints all the tasks in the list which contain the keyword.
+     *
+     * @param keyword the keyword to search by
+     */
+    public void printByKeyword(String keyword) {
+        int count = 1;
+        for (int i = 0; i < this.list.size(); i++) {
+            if (this.list.get(i).hasKeyword(keyword)) {
+                System.out.println(count + ". " + this.list.get(i).toString());
+                count++;
+            }
+        }
+    }
+
 }
