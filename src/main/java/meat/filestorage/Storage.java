@@ -113,7 +113,7 @@ public class Storage {
      *
      * @param list the list to add the tasks from the file
      */
-    public void fileToList(ArrayList<Task> list) {
+    public void fileToList(Tasklist list) {
         try {
             System.out.println("Working directory: " + System.getProperty("user.dir"));
 
@@ -126,7 +126,7 @@ public class Storage {
                     case 3: //Todo
                         Todo todo = new Todo(details[2]);
                         if (details[1].equals("[X]")) {
-                            todo.Mark();
+                            todo.mark();
                         }
                         list.add(todo);
                         break;
@@ -135,7 +135,7 @@ public class Storage {
                         LocalDateTime endDateTime = LocalDateTime.parse(details[3], formatter);
                         Deadline deadline = new Deadline(details[2], endDateTime);
                         if (details[1].equals("[X]")) {
-                            deadline.Mark();
+                            deadline.mark();
                         }
                         list.add(deadline);
                         break;
@@ -145,7 +145,7 @@ public class Storage {
                         LocalDateTime start = LocalDateTime.parse(details[4], format);
                         Event event = new Event(details[2], end, start);
                         if (details[1].equals("[X]")) {
-                            event.Mark();
+                            event.mark();
                         }
                         list.add(event);
                         break;

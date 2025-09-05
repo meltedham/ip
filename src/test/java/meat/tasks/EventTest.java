@@ -18,10 +18,10 @@ public class EventTest {
 
         Event event = new Event("Meeting", endTime, startTime);
 
-        assertEquals("Meeting", event.Name());
-        assertEquals("[E]", event.Type());
-        assertEquals("05.09.2025 09:00", event.Start());
-        assertEquals("05.09.2025 17:00", event.End());
+        assertEquals("Meeting", event.name());
+        assertEquals("[E]", event.type());
+        assertEquals("05.09.2025 09:00", event.start());
+        assertEquals("05.09.2025 17:00", event.end());
     }
 
     /** Tests the string and file representation of an Event task,
@@ -33,7 +33,7 @@ public class EventTest {
         LocalDateTime endTime = LocalDateTime.of(2025, 9, 5, 17, 0);
 
         Event event = new Event("Meeting", endTime, startTime);
-        event.Mark();
+        event.mark();
 
         String expectedString = "[E][X] Meeting(from: 05.09.2025 09:00 to: 05.09.2025 17:00)";
         String expectedFile = "[E]|[X]|Meeting|05.09.2025 17:00|05.09.2025 09:00";

@@ -4,15 +4,15 @@ package meat.tasks;
  * Interface for tasks. Todo implements Task.
  */
 public interface Task {
-    public abstract void Mark();
+    public abstract void mark();
 
-    public abstract void Unmark();
+    public abstract void unmark();
 
-    public abstract String Type();
+    public abstract String type();
 
-    public abstract String Marked();
+    public abstract String marked();
 
-    public abstract String Name();
+    public abstract String name();
 
     public abstract String toString();
 
