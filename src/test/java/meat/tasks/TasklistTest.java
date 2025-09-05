@@ -15,10 +15,10 @@ public class TasklistTest {
     /** Tests adding a task to the Tasklist and checking task count. */
     @Test
     void testAddTaskCount() {
-        Tasklist taskList = new Tasklist(new ArrayList<>());
+        Tasklist taskList = new Tasklist();
         Todo todo = new Todo("Task 1");
 
-        taskList.Add(todo);
+        taskList.add(todo);
 
         assertEquals(1, taskList.taskCount());
         assertEquals(todo, taskList.getTask(0));
@@ -28,15 +28,15 @@ public class TasklistTest {
      * Tests deleting a task from the Tasklist and checking task count. */
     @Test
     void testDeleteTaskCount() {
-        Tasklist taskList = new Tasklist(new ArrayList<>());
+        Tasklist taskList = new Tasklist();
         Todo todo1 = new Todo("Task 1");
         Todo todo2 = new Todo("Task 2");
 
-        taskList.Add(todo1);
-        taskList.Add(todo2);
+        taskList.add(todo1);
+        taskList.add(todo2);
         assertEquals(2, taskList.taskCount());
 
-        taskList.Delete(1);
+        taskList.delete(1);
         assertEquals(1, taskList.taskCount());
         assertEquals(todo2, taskList.getTask(0));
     }
@@ -44,24 +44,24 @@ public class TasklistTest {
     /** Tests marking and unmarking a task in the Tasklist. */
     @Test
     void testMarkUnmark() {
-        Tasklist taskList = new Tasklist(new ArrayList<>());
+        Tasklist taskList = new Tasklist();
         Todo todo = new Todo("Read Book");
-        taskList.Add(todo);
-        assertEquals("[ ]", todo.Marked());
+        taskList.add(todo);
+        assertEquals("[ ]", todo.marked());
 
-        taskList.Mark(1);
-        assertEquals("[X]", todo.Marked());
+        taskList.mark(1);
+        assertEquals("[X]", todo.marked());
 
-        taskList.Unmark(1);
-        assertEquals("[ ]", todo.Marked());
+        taskList.unmark(1);
+        assertEquals("[ ]", todo.marked());
     }
 
     /** Tests retrieving a task by index from the Tasklist. */
     @Test
     void testGet() {
-        Tasklist taskList = new Tasklist(new ArrayList<>());
+        Tasklist taskList = new Tasklist();
         Todo todo = new Todo("Read Book");
-        taskList.Add(todo);
+        taskList.add(todo);
 
         assertEquals(todo, taskList.getTask(0));
     }
@@ -72,14 +72,14 @@ public class TasklistTest {
      */
     @Test
     void testAddTaskTypes() {
-        Tasklist taskList = new Tasklist(new ArrayList<>());
+        Tasklist taskList = new Tasklist();
         Todo todo = new Todo("Read Book");
         Deadline deadline = new Deadline("Submit report", LocalDateTime.of(2025, 9, 5, 18, 30));
         Event event = new Event("Meeting", LocalDateTime.of(2025, 9, 5, 17, 0), LocalDateTime.of(2025, 9, 5, 9, 0));
 
-        taskList.Add(todo);
-        taskList.Add(deadline);
-        taskList.Add(event);
+        taskList.add(todo);
+        taskList.add(deadline);
+        taskList.add(event);
 
         assertEquals(3, taskList.taskCount());
         assertEquals(true, taskList.getTask(0) instanceof Todo);

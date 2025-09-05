@@ -9,7 +9,7 @@ public class Todo implements Task {
     private final String name;
 
     /** Indicates whether the task is done. */
-    private boolean done;
+    private boolean isDone;
 
     /**
      * Constructs a Todo with a name.
@@ -19,21 +19,21 @@ public class Todo implements Task {
      */
     public Todo(String name) {
         this.name = name;
-        this.done = false;
+        this.isDone = false;
     }
 
     /**
      * Marks the task as done.
      */
-    public void Mark() {
-        this.done = true;
+    public void mark() {
+        this.isDone = true;
     }
 
     /**
      * Marks the task as not done.
      */
-    public void Unmark() {
-        this.done = false;
+    public void unmark() {
+        this.isDone = false;
     }
 
     /**
@@ -42,7 +42,7 @@ public class Todo implements Task {
      *
      * @return a string representing the task type
      */
-    public String Type() {
+    public String type() {
         String TED = "";
         if (this instanceof Event) {
             TED = "[E]";
@@ -60,9 +60,9 @@ public class Todo implements Task {
      *
      * @return a string representing the completion status
      */
-    public String Marked() {
+    public String marked() {
         String tick = "";
-        if (this.done)
+        if (this.isDone)
         {
             tick = "[X]";
         } else {
@@ -76,7 +76,7 @@ public class Todo implements Task {
      *
      * @return the task name
      */
-    public String Name() {
+    public String name() {
         return this.name;
     }
 
@@ -87,7 +87,7 @@ public class Todo implements Task {
      * @return the string representation of the task
      */
     public String toString() {
-        return this.Type() + this.Marked() + " " + this.Name();
+        return this.type() + this.marked() + " " + this.name();
     }
 
     /**
@@ -97,7 +97,7 @@ public class Todo implements Task {
      * @return the string representation of the task for file storage
      */
     public String toFile() {
-        return this.Type() + "|" + this.Marked() + "|" + this.name;
+        return this.type() + "|" + this.marked() + "|" + this.name;
     }
 
     /**

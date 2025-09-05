@@ -49,12 +49,12 @@ public class StorageTest {
         Todo todo = new Todo("Read Book");
         storage.writeFile(todo);
 
-        ArrayList<Task> list = new ArrayList<>();
-        storage.fileToList(list);
+        Tasklist tasklist = new Tasklist();
+        storage.fileToList(tasklist);
 
-        assertEquals(1, list.size());
-        assertEquals("Read Book", list.get(0).Name());
-        assertEquals(false, list.get(0).Marked().equals("[X]"));
+        assertEquals(1, tasklist.taskCount());
+        assertEquals("Read Book", tasklist.getTask(0).name());
+        assertEquals(false, tasklist.getTask(0).marked().equals("[X]"));
         new File(TEST_FILE).delete();
     }
 
@@ -71,12 +71,12 @@ public class StorageTest {
         storage.appendFile(todo1);
         storage.appendFile(todo2);
 
-        ArrayList<Task> list = new ArrayList<>();
-        storage.fileToList(list);
+        Tasklist tasklist = new Tasklist();
+        storage.fileToList(tasklist);
 
-        assertEquals(2, list.size());
-        assertEquals("Task 1", list.get(0).Name());
-        assertEquals("Task 2", list.get(1).Name());
+        assertEquals(2, tasklist.taskCount());
+        assertEquals("Task 1", tasklist.getTask(0).name());
+        assertEquals("Task 2", tasklist.getTask(1).name());
 
         new File(TEST_FILE).delete();
     }
@@ -90,20 +90,20 @@ public class StorageTest {
         storage.clearFile();
 
         ArrayList<Task> tasks = new ArrayList<>();
-        Tasklist taskList = new Tasklist(tasks);
+        Tasklist tasklist = new Tasklist();
         Todo todo = new Todo("Read Book");
         Deadline deadline = new Deadline("Submit report", LocalDateTime.of(2025, 9, 5, 18, 30));
-        taskList.Add(todo);
-        taskList.Add(deadline);
+        tasklist.add(todo);
+        tasklist.add(deadline);
 
-        storage.modifyFile(taskList);
+        storage.modifyFile(tasklist);
 
-        ArrayList<Task> list = new ArrayList<>();
-        storage.fileToList(list);
+        //ArrayList<Task> list = new ArrayList<>();
+        storage.fileToList(tasklist);
 
-        assertEquals(2, list.size());
-        assertEquals("Read Book", list.get(0).Name());
-        assertEquals("Submit report", list.get(1).Name());
+        assertEquals(2, tasklist.taskCount());
+        assertEquals("Read Book", tasklist.getTask(0).name());
+        assertEquals("Submit report", tasklist.getTask(1).name());
 
         new File(TEST_FILE).delete();
     }

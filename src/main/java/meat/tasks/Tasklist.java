@@ -14,11 +14,9 @@ public class Tasklist {
 
     /**
      * Constructs a Tasklist with an initial list of tasks.
-     *
-     * @param tasks the initial list of Task objects
      */
-    public Tasklist(ArrayList<Task> tasks) {
-        this.list = tasks;
+    public Tasklist() {
+        this.list = new ArrayList<Task>();
     }
 
     /**
@@ -36,8 +34,8 @@ public class Tasklist {
      *
      * @param taskNum the 1-based task number
      */
-    public void Mark(int taskNum) {
-        list.get(taskNum - 1).Mark();
+    public void mark(int taskNum) {
+        list.get(taskNum - 1).mark();
     }
 
     /**
@@ -45,8 +43,8 @@ public class Tasklist {
      *
      * @param taskNum the 1-based task number
      */
-    public void Unmark(int taskNum) {
-        list.get(taskNum - 1).Unmark();
+    public void unmark(int taskNum) {
+        list.get(taskNum - 1).unmark();
     }
 
     /**
@@ -54,7 +52,7 @@ public class Tasklist {
      *
      * @param taskNum the 1-based task number
      */
-    public void Delete(int taskNum) {
+    public void delete(int taskNum) {
         list.remove(taskNum - 1);
     }
 
@@ -63,7 +61,7 @@ public class Tasklist {
      *
      * @param task the Task object to add
      */
-    public void Add(Task task) {
+    public void add(Task task) {
         list.add(task);
     }
 
@@ -78,35 +76,43 @@ public class Tasklist {
 
     /**
      * Prints all tasks in the list to the console, numbered sequentially.
+     *
+     * @return A string representing the list of tasks
      */
-    public void printList() {
+    public String printList() {
+        String list = "";
         for (int i = 0; i < this.list.size(); i++) {
-            System.out.println((i + 1) + ". " + this.list.get(i).toString());
+            list = list + (i + 1) + ". " + this.list.get(i).toString() + "\n";
         };
+        return list;
     }
 
     /**
      * Prints a single task by its number.
      *
      * @param taskNum the 1-based task number
+     * @return A String representing the task
      */
-    public void printTask(int taskNum) {
-        System.out.println(this.list.get(taskNum - 1).toString());
+    public String printTask(int taskNum) {
+        return this.list.get(taskNum - 1).toString();
     }
 
     /**
      * Finds and prints all the tasks in the list which contain the keyword.
      *
      * @param keyword the keyword to search by
+     * @return A String representing the tasks that contain the keyword
      */
-    public void printByKeyword(String keyword) {
+    public String printByKeyword(String keyword) {
         int count = 1;
+        String list = "";
         for (int i = 0; i < this.list.size(); i++) {
             if (this.list.get(i).hasKeyword(keyword)) {
-                System.out.println(count + ". " + this.list.get(i).toString());
+                list = list + count + ". " + this.list.get(i).toString() + "\n";
                 count++;
             }
         }
+        return list;
     }
 
 }

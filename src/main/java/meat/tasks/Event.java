@@ -29,7 +29,7 @@ public class Event extends Deadline {
      *
      * @return the formatted start date/time
      */
-    public String Start() {
+    public String start() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return this.start.format(formatter);
     }
@@ -42,7 +42,7 @@ public class Event extends Deadline {
      */
     @Override
     public String toString() {
-        return Type() + Marked() + " " + Name() + "(from: " + this.Start() + " " + "to: " + End() + ")";
+        return type() + marked() + " " + name() + "(from: " + this.start() + " " + "to: " + end() + ")";
     }
 
     /**
@@ -53,6 +53,6 @@ public class Event extends Deadline {
      */
     @Override
     public String toFile() {
-        return Type() + "|" + Marked() + "|" + Name() + "|" + End() + "|" + this.Start();
+        return type() + "|" + marked() + "|" + name() + "|" + end() + "|" + this.start();
     }
 }

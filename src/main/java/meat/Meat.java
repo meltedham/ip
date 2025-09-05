@@ -17,24 +17,47 @@ import java.util.Scanner;
  * runs a loop until the user exits with "bye".
  */
 public class Meat {
-    public static void main(String[] args) {
-        Storage storage = new Storage("resources/meat.txt");
 
-        ArrayList<Task> list = new ArrayList<>();
-        Tasklist taskList = new Tasklist(list);
-        Ui ui = new Ui(taskList);
-        Parser parser = new Parser(ui, taskList, storage);
+    private Storage storage;
+    private Tasklist taskList;
+    private Ui ui;
+    private Parser parser;
+
+    public Meat() {
+        this.storage = new Storage("resources/meat.txt");
+        this.taskList = new Tasklist();
+        this.ui = new Ui(taskList);
+        this.parser = new Parser(ui, taskList, storage);
         //fileEditor.clearFile();
-        ui.Start("Meat");
+        this.storage.fileToList(this.taskList);
+    }
 
-        storage.fileToList(list);
+    public String run() {
+        return ui.start("Meat");
+        /*
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine(); //entire line of input
         while (!input.equals("bye")) {
-            parser.checkAnyValid(input);
+            this.parser.checkAnyValid(input);
             input = scanner.nextLine();
         }
         System.out.println("Bye. Hope to see you again soon!");
         scanner.close();
+        */
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        if (input.equals("bye")) {
+            return "Bye. Hope to see you again soon!";
+        } else {
+            return this.parser.checkAnyValid(input);
+        }
+    }
+
+    public static void main(String[] args) {
+        new Meat();
     }
 }

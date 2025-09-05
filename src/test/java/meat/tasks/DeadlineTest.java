@@ -16,9 +16,9 @@ public class DeadlineTest {
         LocalDateTime deadlineTime = LocalDateTime.of(2025, 9, 5, 18, 30);
         Deadline deadline = new Deadline("Submit report", deadlineTime);
 
-        assertEquals("Submit report", deadline.Name());
-        assertEquals("[D]", deadline.Type());
-        assertEquals("05.09.2025 18:30", deadline.End());
+        assertEquals("Submit report", deadline.name());
+        assertEquals("[D]", deadline.type());
+        assertEquals("05.09.2025 18:30", deadline.end());
     }
 
     /** Tests the string and file representation of a Deadline task. */

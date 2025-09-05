@@ -28,7 +28,7 @@ public class Deadline extends Todo {
      *
      * @return the formatted end date/time
      */
-    public String End() {
+    public String end() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return this.end.format(formatter);
     }
@@ -41,7 +41,7 @@ public class Deadline extends Todo {
      */
     @Override
     public String toString() {
-        return Type() + Marked() + " " + Name() + "(by: " + this.End() + ")";
+        return type() + marked() + " " + name() + "(by: " + this.end() + ")";
     }
 
     /**
@@ -52,6 +52,6 @@ public class Deadline extends Todo {
      */
     @Override
     public String toFile() {
-        return Type() + "|" + Marked() + "|" + Name() + "|" + this.End();
+        return type() + "|" + marked() + "|" + name() + "|" + this.end();
     }
 }

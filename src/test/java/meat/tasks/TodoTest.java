@@ -13,21 +13,21 @@ public class TodoTest {
     void testNameType() {
     Todo todo = new Todo("Read book");
 
-    assertEquals("Read book", todo.Name());
-    assertEquals("[T]", todo.Type());
+    assertEquals("Read book", todo.name());
+    assertEquals("[T]", todo.type());
     }
 
     /** Tests marking and unmarking a Todo task. */
     @Test
     void testMarkUnmark() {
         Todo todo = new Todo("Read book");
-        assertEquals("[ ]", todo.Marked());
+        assertEquals("[ ]", todo.marked());
 
-        todo.Mark();
-        assertEquals("[X]", todo.Marked());
+        todo.mark();
+        assertEquals("[X]", todo.marked());
 
-        todo.Unmark();
-        assertEquals("[ ]", todo.Marked());
+        todo.unmark();
+        assertEquals("[ ]", todo.marked());
     }
 
     /** Tests the string and file representations of a Todo. */
