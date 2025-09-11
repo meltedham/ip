@@ -35,6 +35,9 @@ public class Parser {
      * @param storage the Storage object for file operations
      */
     public Parser(Ui ui, Tasklist taskList, Storage storage) {
+        assert ui != null : "Ui for Parser cannot be null";
+        assert taskList != null : "Tasklist for Parser cannot be null";
+        assert storage != null : "Storage for Parser cannot be null";
         this.ui = ui;
         this.taskList = taskList;
         this.storage = storage;
@@ -49,6 +52,7 @@ public class Parser {
      * @return A String representing Meat's response to the input
      */
     public String checkAnyValid(String input) {
+        assert input != null : "Cannot parse a null input";
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
         switch (words[0]) {
         case "list":
@@ -164,6 +168,7 @@ public class Parser {
      * @return true if valid, false otherwise
      */
     public boolean hasValidTaskNum(String input) {
+        assert input != null : "Input to check cannot be null";
         String[] words = input.split(" ");
         if (words.length == 1) {
             return false;
@@ -188,6 +193,7 @@ public class Parser {
      * @return true if valid, else false
      */
     public boolean hasName(String input) {
+        assert input != null : "Input to check cannot be null";
         String[] words = input.split(" ");
         if (words.length == 1) {
             return false;
@@ -203,6 +209,7 @@ public class Parser {
      * @return true if valid, else false
      */
     public boolean isDeadlineValid(String input) {
+        assert input != null : "Input to check cannot be null";
         String[] split = input.split(" ", 2);
         String[] split2nd = split[1].split("/", 2); // "task" "/by: date/time"
         if (split2nd.length == 1) {
@@ -219,6 +226,7 @@ public class Parser {
      * @return true if valid, else false
      */
     public boolean isEventValid (String input) {
+        assert input != null : "Input to check cannot be null";
         String[] words = input.split(" ", 2);
         String[] parts = words[1].split("/"); //split after the /
         if (parts.length < 3) {
@@ -241,6 +249,7 @@ public class Parser {
      * @return true if valid, else false
      */
     public boolean isDateValid(String date) {
+        assert date != null : "Input to check cannot be null";
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
             LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
@@ -257,6 +266,7 @@ public class Parser {
      * @return true if valid, else false
      */
     public boolean isFindValid(String input) {
+        assert input != null : "Input to check cannot be null";
         String[] words = input.split(" ", 2);
         if (words.length == 1) {
             return false;
