@@ -18,6 +18,7 @@ public class Todo implements Task {
      * @param name the task name
      */
     public Todo(String name) {
+        assert name != null: "Task name cannot be null";
         this.name = name;
         this.isDone = false;
     }
@@ -107,6 +108,7 @@ public class Todo implements Task {
      * @return true if the name contains the keyword, else false
      */
     public boolean hasKeyword(String keyword) {
+        assert keyword != null : "find keyword cannot be null";
         if (this.name.contains(keyword)) {
             return true;
         } else {

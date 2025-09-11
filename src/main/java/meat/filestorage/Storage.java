@@ -40,6 +40,7 @@ public class Storage {
      */
     public Storage(String path)
     {
+        assert path != null : "Path for Storage cannot be null";
         this.path = path;
         this.file = new File(this.path);
     }
@@ -59,6 +60,7 @@ public class Storage {
      * @param task the task to write
      */
     public void writeFile(Task task) {
+        assert task != null : "Task to write to file cannot be null";
         try {
             String textToAdd = task.toFile();
             FileWriter fileWriter = new FileWriter(this.path);
@@ -75,6 +77,7 @@ public class Storage {
      * @param task the task to append
      */
     public void appendFile(Task task) {
+        assert task != null : "Task to append to file cannot be null";
         try {
             String textToAppend = task.toFile();
             FileWriter fileWriter = new FileWriter(this.path, true); // create a FileWriter in append mode
@@ -92,6 +95,7 @@ public class Storage {
      * @param taskList the task list to save
      */
     public void modifyFile(Tasklist taskList) {
+        assert taskList != null : "Tasklist to modify file with cannot be null";
         this.clearFile();
         for (int i = 0; i < taskList.taskCount(); i++) {
             this.appendFile(taskList.getTask(i));
@@ -111,12 +115,11 @@ public class Storage {
     /**
      * Loads tasks from the file into the list.
      *
-     * @param list the list to add the tasks from the file
+     * @param taskList the list to add the tasks from the file
      */
-    public void fileToList(Tasklist list) {
+    public void fileToList(Tasklist taskList) {
+        assert taskList != null : "Tasklist to write to cannot be null";
         try {
-            System.out.println("Working directory: " + System.getProperty("user.dir"));
-
             Path path = Paths.get(this.path);
             List<String> stringList = Files.readAllLines(path);
             for (int i = 0; i < stringList.size(); i++) {
@@ -128,7 +131,7 @@ public class Storage {
                         if (details[1].equals("[X]")) {
                             todo.mark();
                         }
-                        list.add(todo);
+                        taskList.add(todo);
                         break;
                     case 4: //Deadline
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -137,7 +140,7 @@ public class Storage {
                         if (details[1].equals("[X]")) {
                             deadline.mark();
                         }
-                        list.add(deadline);
+                        taskList.add(deadline);
                         break;
                     case 5: //Event
                         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -147,7 +150,7 @@ public class Storage {
                         if (details[1].equals("[X]")) {
                             event.mark();
                         }
-                        list.add(event);
+                        taskList.add(event);
                         break;
                     default:
                         break;

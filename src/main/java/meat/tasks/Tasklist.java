@@ -26,6 +26,7 @@ public class Tasklist {
      * @return the Task object at the index
      */
     public Task getTask(int i) {
+        assert i >= 0 && i < list.size() : "Invalid index for getTask";
         return this.list.get(i);
     }
 
@@ -35,6 +36,7 @@ public class Tasklist {
      * @param taskNum the 1-based task number
      */
     public void mark(int taskNum) {
+        assert taskNum > 0 && taskNum <= list.size() : "Invalid task number for mark";
         list.get(taskNum - 1).mark();
     }
 
@@ -44,6 +46,7 @@ public class Tasklist {
      * @param taskNum the 1-based task number
      */
     public void unmark(int taskNum) {
+        assert taskNum > 0 && taskNum <= list.size() : "Invalid task number for unmark";
         list.get(taskNum - 1).unmark();
     }
 
@@ -53,6 +56,7 @@ public class Tasklist {
      * @param taskNum the 1-based task number
      */
     public void delete(int taskNum) {
+        assert taskNum > 0 && taskNum <= list.size() : "Invalid task number for delete";
         list.remove(taskNum - 1);
     }
 
@@ -62,6 +66,7 @@ public class Tasklist {
      * @param task the Task object to add
      */
     public void add(Task task) {
+        assert task != null : "Cannot add a null task";
         list.add(task);
     }
 
@@ -94,6 +99,7 @@ public class Tasklist {
      * @return A String representing the task
      */
     public String printTask(int taskNum) {
+        assert taskNum > 0 && taskNum <= list.size() : "Invalid task number for printTask";
         return this.list.get(taskNum - 1).toString();
     }
 
@@ -104,6 +110,7 @@ public class Tasklist {
      * @return A String representing the tasks that contain the keyword
      */
     public String printByKeyword(String keyword) {
+        assert keyword != null : "find keyword cannot be null";
         int count = 1;
         String list = "";
         for (int i = 0; i < this.list.size(); i++) {

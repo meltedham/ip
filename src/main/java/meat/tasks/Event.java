@@ -21,6 +21,7 @@ public class Event extends Deadline {
      */
     public Event(String name, LocalDateTime end, LocalDateTime start) {
         super(name, end);
+        assert start != null : "Start time cannot be null";
         this.start = start;
     }
 

@@ -20,6 +20,7 @@ public class Deadline extends Todo {
      */
     public Deadline(String name, LocalDateTime end) {
         super(name);
+        assert end != null : "End time cannot be null";
         this.end = end;
     }
 
