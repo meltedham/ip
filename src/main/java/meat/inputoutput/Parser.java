@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Parses and validates user input commands for tasks.
- * Handles commands like adding, marking, unmarking, deleting, and listing tasks.
+ * Handles adding, marking, unmarking, deleting, finding and listing tasks.
  * Interacts with Ui for output, Tasklist for task management, and Storage for saving to file.
  */
 public class Parser {
@@ -55,110 +55,171 @@ public class Parser {
         assert input != null : "Cannot parse a null input";
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
         switch (words[0]) {
-        case "list":
-            if (input.equals("list")) {
-                return this.ui.list();
-            }
-            break;
-        case "mark":
-            if (this.hasValidTaskNum(input)) {
-                int taskNum = Integer.parseInt(words[1]);
-
-                this.taskList.mark(taskNum);
-                storage.modifyFile(this.taskList);
-                return this.ui.mark(taskNum);
-            } else {
-                return this.ui.invalidTaskNum();
-            }
-        case "unmark":
-            if (this.hasValidTaskNum(input)) {
-                int taskNum = Integer.parseInt(words[1]);
-
-                this.taskList.unmark(taskNum);
-                storage.modifyFile(this.taskList);
-                return this.ui.unmark(taskNum);
-            } else {
-                return this.ui.invalidTaskNum();
-            }
-        case "delete":
-            if (this.hasValidTaskNum(input)) {
-                int taskNum = Integer.parseInt(words[1]);
-
-                String message = this.ui.delete(taskNum);
-                this.taskList.delete(taskNum);
-                message = message + "\n" + this.ui.taskCount();
-                storage.modifyFile(this.taskList);
-                return message;
-            } else {
-                return this.ui.invalidTaskNum();
-            }
-        case "todo":
-            if (this.hasName(input)) {
-                Todo todo = new Todo(words[1].trim());
-
-                this.taskList.add(todo);
-                this.storage.appendFile(todo);
-                return this.ui.add(todo);
-            } else {
-                return this.ui.noTaskDesc();
-            }
-        case "deadline":
-            if (this.hasName(input)) {
-                if (this.isDeadlineValid(input)) {
-                    String[] parts = words[1].split("/"); //split after the /
-                    String[] time = parts[1].split(": ");
-                    if (this.isDateValid(time[1])) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
-                        Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
-
-                        this.taskList.add(deadline);
-                        this.storage.appendFile(deadline);
-                        return this.ui.add(deadline);
+            case "list":
+                if (input.equals("list")) {
+                    return this.ui.list();
+                }
+                break;
+            case "mark":
+                if (this.hasValidTaskNum(input)) {
+                    return handleMark(words[1]);
+                } else {
+                    return this.ui.invalidTaskNum();
+                }
+            case "unmark":
+                if (this.hasValidTaskNum(input)) {
+                    return handleUnmark(words[1]);
+                } else {
+                    return this.ui.invalidTaskNum();
+                }
+            case "delete":
+                if (this.hasValidTaskNum(input)) {
+                    return handleDelete(words[1]);
+                } else {
+                    return this.ui.invalidTaskNum();
+                }
+            case "todo":
+                if (this.hasName(input)) {
+                    return handleTodo(words[1].trim());
+                } else {
+                    return this.ui.noTaskDesc();
+                }
+            case "deadline":
+                if (this.hasName(input)) {
+                    if (this.isDeadlineValid(input)) {
+                        return handleDeadline(words[1]);
                     } else {
-                        return this.ui.invalidDate();
+                        return this.ui.invalidDeadline();
                     }
                 } else {
-                    return this.ui.invalidDeadline();
+                    return this.ui.noTaskDesc();
                 }
-            } else {
-                return this.ui.noTaskDesc();
-            }
-        case "event":
-            if (this.hasName(input)) {
-                if (this.isEventValid(input)) {
-                    String[] parts = words[1].split("/"); //split after the /
-                    String[] start = parts[1].split(": ");
-                    String[] end = parts[2].split(": ");
-                    if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                        LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
-                        LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
-                        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
-
-                        this.taskList.add(event);
-                        this.storage.appendFile(event);
-                        return this.ui.add(event);
+            case "event":
+                if (this.hasName(input)) {
+                    if (this.isEventValid(input)) {
+                        return handleEvent(words[1]);
                     } else {
-                        return this.ui.invalidDate();
+                        return this.ui.invalidEvent();
                     }
                 } else {
-                    return this.ui.invalidEvent();
+                    return this.ui.noTaskDesc();
                 }
-            } else {
-                return this.ui.noTaskDesc();
-            }
-        case "find":
-            if (this.isFindValid(input)) {
-                String keyword = words[1].trim();
-                return this.ui.find(keyword);
-            } else {
-                return this.ui.invalidFind();
-            }
-        default:
-            return this.ui.commands();
+            case "find":
+                if (this.isFindValid(input)) {
+                    String keyword = words[1].trim();
+                    return this.ui.find(keyword);
+                } else {
+                    return this.ui.invalidFind();
+                }
+            default:
+                return this.ui.commands();
         }
         return "";
+    }
+
+    /**
+     * Marks the specified task as completed.
+     *
+     * @param validInput the valid task number as a string
+     * @return a confirmation message from the UI
+     */
+    public String handleMark(String validInput){
+        int taskNum = Integer.parseInt(validInput);
+        this.taskList.mark(taskNum);
+        storage.modifyFile(this.taskList);
+        return this.ui.mark(taskNum);
+    }
+
+    /**
+     * Marks the specified task as not done.
+     *
+     * @param validInput the valid task number as a string
+     * @return a confirmation message from the UI
+     */
+    public String handleUnmark(String validInput){
+        int taskNum = Integer.parseInt(validInput);
+
+        this.taskList.unmark(taskNum);
+        storage.modifyFile(this.taskList);
+        return this.ui.unmark(taskNum);
+    }
+
+    /**
+     * Deletes the specified task from the task list.
+     *
+     * @param validInput the valid task number as a string
+     * @return a deletion confirmation message and the new task count
+     */
+    public String handleDelete(String validInput){
+        int taskNum = Integer.parseInt(validInput);
+
+        String message = this.ui.delete(taskNum);
+        this.taskList.delete(taskNum);
+        message = message + "\n" + this.ui.taskCount();
+        storage.modifyFile(this.taskList);
+        return message;
+    }
+
+    /**
+     * Creates and adds a Todo task to the task list.
+     *
+     * @param validInput the task description
+     * @return a confirmation message from the UI
+     */
+    public String handleTodo(String validInput) {
+        Todo todo = new Todo(validInput);
+
+        this.taskList.add(todo);
+        this.storage.appendFile(todo);
+        return this.ui.add(todo);
+    }
+
+    /**
+     * Creates and adds a Deadline task to the task list,
+     * if end time has the format: "dd.MM.yyyy HH:mm".
+     *
+     * @param validInput the description and deadline string
+     * @return a confirmation message if valid, else an invalid date message
+     */
+    public String handleDeadline(String validInput) {
+        String[] parts = validInput.split("/"); //split after the /
+        String[] time = parts[1].split(": ");
+        if (this.isDateValid(time[1])) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+            LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+            Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
+
+            this.taskList.add(deadline);
+            this.storage.appendFile(deadline);
+            return this.ui.add(deadline);
+        } else {
+            return this.ui.invalidDate();
+        }
+    }
+
+    /**
+     * Creates and adds an Event task to the task list,
+     * if start and end time has the format: "dd.MM.yyyy HH:mm".
+     *
+     * @param validInput the description and event time range
+     * @return a confirmation message if valid, else an invalid date message
+     */
+    public String handleEvent(String validInput){
+        String[] parts = validInput.split("/"); //split after the /
+        String[] start = parts[1].split(": ");
+        String[] end = parts[2].split(": ");
+        if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+            LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
+            LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
+            Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
+
+            this.taskList.add(event);
+            this.storage.appendFile(event);
+            return this.ui.add(event);
+        } else {
+            return this.ui.invalidDate();
+        }
     }
 
     /**
