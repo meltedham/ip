@@ -1,5 +1,8 @@
 package meat.tasks;
 
+import javax.swing.text.DateFormatter;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -54,5 +57,32 @@ public class Deadline extends Todo {
     @Override
     public String toFile() {
         return type() + "|" + marked() + "|" + name() + "|" + this.end();
+    }
+
+    /**
+     * Checks if the task ends on a particular date.
+     *
+     * @param date the date to search by
+     * @return returns true if the end date matches the given date, else false
+     */
+    public boolean onEndDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate dateFormatted = LocalDate.parse(date, formatter);
+        if (this.end.toLocalDate().equals(dateFormatted)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Calls the function to check if the task ends on a particular date.
+     *
+     * @param date the date to search by
+     * @return returns true if the end date matches the given date, else false
+     */
+    @Override
+    public boolean onDate(String date) {
+        return this.onEndDate(date);
     }
 }

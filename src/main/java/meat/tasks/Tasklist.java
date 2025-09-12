@@ -122,4 +122,22 @@ public class Tasklist {
         return list;
     }
 
+    /**
+     * Finds and prints all the tasks in the list which are on a particular date.
+     *
+     * @param date the keyword to search by
+     * @return A String representing the tasks that contain the date
+     */
+    public String printByDate(String date) {
+        assert date != null;
+        int count = 1;
+        String list = "";
+        for (int i = 0; i < this.list.size(); i++) {
+            if (this.list.get(i).onDate(date)) {
+                list = list + count + ". " + this.list.get(i).toString() + "\n";
+                count++;
+            }
+        }
+        return list;
+    }
 }

@@ -8,6 +8,7 @@ import meat.tasks.Tasklist;
 import meat.tasks.Todo;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -110,6 +111,12 @@ public class Parser {
                     return this.ui.find(keyword);
                 } else {
                     return this.ui.invalidFind();
+                }
+            case "schedule":
+                if (this.isScheduleValid(input)) {
+                    return this.ui.schedule(words[1].trim());
+                } else {
+                    return this.ui.invalidSchedule();
                 }
             default:
                 return this.ui.commands();
@@ -333,6 +340,30 @@ public class Parser {
             return false;
         } else {
             return true;
+        }
+    }
+
+    /**
+     * Checks if the input is a valid schedule command, by checking if a date is provided,
+     * and if it is in the format "dd.MM.yyyy".
+     *
+     * @param input the command string
+     * @return true if valid, else false
+     */
+    public boolean isScheduleValid(String input) {
+        assert input != null : "Date to view schedule by cannot be null";
+        String[] words = input.split(" ", 2);
+        String date = words[1].trim();
+        if (words.length == 1) {
+            return false;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate dateFormatted = LocalDate.parse(date, formatter);
+                return true;
+            } catch (DateTimeException e) {
+                return false;
+            }
         }
     }
 }

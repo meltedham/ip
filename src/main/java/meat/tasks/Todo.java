@@ -115,4 +115,15 @@ public class Todo implements Task {
             return false;
         }
     }
+
+    /**
+     * Checks if the task is on a particular date.
+     *
+     * @param date the keyword to search by
+     * @return always returns false as a Todo has no date
+     */
+    public boolean onDate(String date) {
+        assert date != null : "Schedule date cannot be null";
+        return false;
+    }
 }
