@@ -19,4 +19,6 @@ public interface Task {
     public abstract String toFile();
 
     public abstract boolean hasKeyword(String keyword);
+
+    public abstract boolean onDate(String date);
 }

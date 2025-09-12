@@ -160,5 +160,24 @@ public class Ui {
     public String invalidFind() {
         return "Provide a keyword to search by >:(";
     }
+
+    /**
+     * Displays a header message before the list of tasks on a particular date is printed.
+     *
+     * @param date the date to search the tasks by
+     * @return A String representing a schedule command message
+     */
+    public String schedule(String date) {
+        return "Here's your schedule for " + date + ":\n" + this.taskList.printByDate(date);
+    }
+
+    /**
+     * Informs the user of invalid schedule syntax.
+     *
+     * @return A String representing an invalid schedule command
+     */
+    public String invalidSchedule() {
+        return "Date provided to view schedule is in the wrong format :(\n" + "Enter: schedule DD.MM.YYYY";
+    }
 }
 

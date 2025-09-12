@@ -1,5 +1,6 @@
 package meat.tasks;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -56,4 +57,31 @@ public class Event extends Deadline {
     public String toFile() {
         return type() + "|" + marked() + "|" + name() + "|" + end() + "|" + this.start();
     }
-}
+
+    /**
+     * Checks if the task starts on a particular date.
+     *
+     * @param date the date to search by
+     * @return returns true if the start date matches the given date, else false
+     */
+    public boolean onStartDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate dateFormatted = LocalDate.parse(date, formatter);
+        if (this.start.toLocalDate().equals(dateFormatted)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Calls functions that check if the task starts/ends on a particular date.
+     *
+     * @param date the date to search by
+     * @return returns true if the start/end date matches the given date, else false
+     */
+    @Override
+    public boolean onDate(String date) {
+        return this.onEndDate(date) || this.onStartDate(date);
+    }
+ }
