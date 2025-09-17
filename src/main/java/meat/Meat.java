@@ -5,11 +5,7 @@ import meat.filestorage.Storage;
 import meat.inputoutput.Parser;
 import meat.inputoutput.Ui;
 
-import meat.tasks.Task;
 import meat.tasks.Tasklist;
-
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Main class to run Meat.
@@ -24,26 +20,15 @@ public class Meat {
     private Parser parser;
 
     public Meat() {
-        this.storage = new Storage("resources/meat.txt");
         this.taskList = new Tasklist();
         this.ui = new Ui(taskList);
+        this.storage = new Storage("resources/meat.txt", ui);
         this.parser = new Parser(ui, taskList, storage);
-        //fileEditor.clearFile();
         this.storage.fileToList(this.taskList);
     }
 
     public String run() {
-        return ui.start("Meat");
-        /*
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine(); //entire line of input
-        while (!input.equals("bye")) {
-            this.parser.checkAnyValid(input);
-            input = scanner.nextLine();
-        }
-        System.out.println("Bye. Hope to see you again soon!");
-        scanner.close();
-        */
+        return storage.validateFileAccess();
     }
 
     /**

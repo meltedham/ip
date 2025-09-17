@@ -140,4 +140,41 @@ public class Tasklist {
         }
         return list;
     }
+
+    //Ai-Assisted: ChatGPT created this method for error handling - duplicate tasks
+    /**
+     * Checks if a task with the same details already exists in the list,
+     * ignoring its marked/unmarked status.
+     *
+     * @param newTask the task to check for duplication
+     * @return true if a duplicate exists, false otherwise
+     */
+    public boolean hasDuplicate(Task newTask) {
+        assert newTask != null : "Task to check cannot be null";
+        for (Task existingTask : list) {
+            // Compare type and name only, ignoring marked/unmarked
+            if (existingTask.type().equals(newTask.type())
+                    && existingTask.name().equals(newTask.name())) {
+                if (existingTask instanceof Deadline && newTask instanceof Deadline) {
+                    // Compare end date/time for Deadlines
+                    Deadline d1 = (Deadline) existingTask;
+                    Deadline d2 = (Deadline) newTask;
+                    if (d1.end().equals(d2.end())) {
+                        return true;
+                    }
+                } else if (existingTask instanceof Event && newTask instanceof Event) {
+                    // Compare start and end for Events
+                    Event e1 = (Event) existingTask;
+                    Event e2 = (Event) newTask;
+                    if (e1.start().equals(e2.start()) && e1.end().equals(e2.end())) {
+                        return true;
+                    }
+                } else if (!(existingTask instanceof Deadline) && !(existingTask instanceof Event)) {
+                    // For Todo, only name/type matters
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -62,62 +62,21 @@ public class Parser {
                 }
                 break;
             case "mark":
-                if (this.hasValidTaskNum(input)) {
-                    return handleMark(words[1]);
-                } else {
-                    return this.ui.invalidTaskNum();
-                }
+                return handleMark(input);
             case "unmark":
-                if (this.hasValidTaskNum(input)) {
-                    return handleUnmark(words[1]);
-                } else {
-                    return this.ui.invalidTaskNum();
-                }
+                return handleUnmark(input);
             case "delete":
-                if (this.hasValidTaskNum(input)) {
-                    return handleDelete(words[1]);
-                } else {
-                    return this.ui.invalidTaskNum();
-                }
+                return handleDelete(input);
             case "todo":
-                if (this.hasName(input)) {
-                    return handleTodo(words[1].trim());
-                } else {
-                    return this.ui.noTaskDesc();
-                }
+                return handleTodo(input);
             case "deadline":
-                if (this.hasName(input)) {
-                    if (this.isDeadlineValid(input)) {
-                        return handleDeadline(words[1]);
-                    } else {
-                        return this.ui.invalidDeadline();
-                    }
-                } else {
-                    return this.ui.noTaskDesc();
-                }
+                return handleDeadline(input);
             case "event":
-                if (this.hasName(input)) {
-                    if (this.isEventValid(input)) {
-                        return handleEvent(words[1]);
-                    } else {
-                        return this.ui.invalidEvent();
-                    }
-                } else {
-                    return this.ui.noTaskDesc();
-                }
+                return handleEvent(input);
             case "find":
-                if (this.isFindValid(input)) {
-                    String keyword = words[1].trim();
-                    return this.ui.find(keyword);
-                } else {
-                    return this.ui.invalidFind();
-                }
+                return handleFind(input);
             case "schedule":
-                if (this.isScheduleValid(input)) {
-                    return this.ui.schedule(words[1].trim());
-                } else {
-                    return this.ui.invalidSchedule();
-                }
+                return handleSchedule(input);
             default:
                 return this.ui.commands();
         }
@@ -125,107 +84,198 @@ public class Parser {
     }
 
     /**
-     * Marks the specified task as completed.
+     * Checks if the mark command is valid, and executes it if valid
+     * Returns messages to show the success or failure.
      *
-     * @param validInput the valid task number as a string
+     * @param input the mark command input
      * @return a confirmation message from the UI
      */
-    public String handleMark(String validInput){
-        int taskNum = Integer.parseInt(validInput);
-        this.taskList.mark(taskNum);
-        storage.modifyFile(this.taskList);
-        return this.ui.mark(taskNum);
-    }
-
-    /**
-     * Marks the specified task as not done.
-     *
-     * @param validInput the valid task number as a string
-     * @return a confirmation message from the UI
-     */
-    public String handleUnmark(String validInput){
-        int taskNum = Integer.parseInt(validInput);
-
-        this.taskList.unmark(taskNum);
-        storage.modifyFile(this.taskList);
-        return this.ui.unmark(taskNum);
-    }
-
-    /**
-     * Deletes the specified task from the task list.
-     *
-     * @param validInput the valid task number as a string
-     * @return a deletion confirmation message and the new task count
-     */
-    public String handleDelete(String validInput){
-        int taskNum = Integer.parseInt(validInput);
-
-        String message = this.ui.delete(taskNum);
-        this.taskList.delete(taskNum);
-        message = message + "\n" + this.ui.taskCount();
-        storage.modifyFile(this.taskList);
-        return message;
-    }
-
-    /**
-     * Creates and adds a Todo task to the task list.
-     *
-     * @param validInput the task description
-     * @return a confirmation message from the UI
-     */
-    public String handleTodo(String validInput) {
-        Todo todo = new Todo(validInput);
-
-        this.taskList.add(todo);
-        this.storage.appendFile(todo);
-        return this.ui.add(todo);
-    }
-
-    /**
-     * Creates and adds a Deadline task to the task list,
-     * if end time has the format: "dd.MM.yyyy HH:mm".
-     *
-     * @param validInput the description and deadline string
-     * @return a confirmation message if valid, else an invalid date message
-     */
-    public String handleDeadline(String validInput) {
-        String[] parts = validInput.split("/"); //split after the /
-        String[] time = parts[1].split(": ");
-        if (this.isDateValid(time[1])) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-            LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
-            Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
-
-            this.taskList.add(deadline);
-            this.storage.appendFile(deadline);
-            return this.ui.add(deadline);
+    public String handleMark(String input) {
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasValidTaskNum(input)) {
+            int taskNum = Integer.parseInt(words[1]);
+            this.taskList.mark(taskNum);
+            storage.modifyFile(this.taskList);
+            return this.ui.mark(taskNum);
         } else {
-            return this.ui.invalidDate();
+            return this.ui.invalidTaskNum();
         }
     }
 
     /**
-     * Creates and adds an Event task to the task list,
-     * if start and end time has the format: "dd.MM.yyyy HH:mm".
+     * Checks if the unmark command is valid, and executes it if valid
+     * Returns messages to show the success or failure.
      *
-     * @param validInput the description and event time range
+     * @param input the mark command input
+     * @return a confirmation message from the UI
+     */
+    public String handleUnmark(String input){
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasValidTaskNum(input)) {
+            int taskNum = Integer.parseInt(words[1]);
+            this.taskList.unmark(taskNum);
+            storage.modifyFile(this.taskList);
+            return this.ui.unmark(taskNum);
+        } else {
+            return this.ui.invalidTaskNum();
+        }
+    }
+
+    /**
+     * Checks if the delete command is valid, and executes it if valid
+     *
+     * @param input the mark command input
+     * @return a deletion confirmation message and the new task count
+     */
+    public String handleDelete(String input){
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasValidTaskNum(input)) {
+            int taskNum = Integer.parseInt(words[1]);
+
+            String message = this.ui.delete(taskNum);
+            this.taskList.delete(taskNum);
+            message = message + "\n" + this.ui.taskCount();
+            storage.modifyFile(this.taskList);
+            return message;
+        } else {
+            return this.ui.invalidTaskNum();
+        }
+    }
+
+    /**
+     * Checks if a todo command is valid, and creates and adds a Todo task
+     * to the task list if valid, else returns an error message
+     *
+     * @param input the task description
+     * @return a confirmation message from the UI
+     */
+    public String handleTodo(String input) {
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasName(input)) {
+            Todo todo = new Todo(words[1].trim());
+            if (this.taskList.hasDuplicate(todo)) {
+                return this.ui.duplicateTasks();
+            } else {
+                this.taskList.add(todo);
+                this.storage.appendFile(todo);
+                return this.ui.add(todo);
+            }
+        } else {
+            return this.ui.noTaskDesc();
+        }
+    }
+
+    /**
+     * Checks if a deadline command is valid, and creates and adds a Deadline task
+     * to the task list, if end time has the format: "dd.MM.yyyy HH:mm", else returns
+     * an error message.
+     *
+     * @param input the description and deadline string
      * @return a confirmation message if valid, else an invalid date message
      */
-    public String handleEvent(String validInput){
-        String[] parts = validInput.split("/"); //split after the /
-        String[] start = parts[1].split(": ");
-        String[] end = parts[2].split(": ");
-        if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-            LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
-            LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
-            Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
+    public String handleDeadline(String input) {
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasName(input)) {
+            if (this.isDeadlineValid(input)) {
+                String[] parts = words[1].split("/"); //split after the /
+                String[] time = parts[1].split(": ");
+                if (this.isDateValid(time[1])) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                    LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+                    Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
 
-            this.taskList.add(event);
-            this.storage.appendFile(event);
-            return this.ui.add(event);
+                    if (this.taskList.hasDuplicate(deadline)) {
+                        return this.ui.duplicateTasks();
+                    } else {
+                        this.taskList.add(deadline);
+                        this.storage.appendFile(deadline);
+                        return this.ui.add(deadline);
+                    }
+                } else {
+                    return this.ui.invalidDate();
+                }
+            } else {
+                return this.ui.invalidDeadline();
+            }
         } else {
-            return this.ui.invalidDate();
+            return this.ui.noTaskDesc();
+        }
+    }
+
+    /**
+     * Checks if an event command is valid, and creates and adds an Event task
+     * to the task list, if start and end time has the format: "dd.MM.yyyy HH:mm",
+     * else returns an error message
+     *
+     * @param input the description and event time range
+     * @return a confirmation message if valid, else an invalid date message
+     */
+    public String handleEvent(String input){
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.hasName(input)) {
+            if (this.isEventValid(input)) {
+                String[] parts = words[1].split("/"); //split after the /
+                String[] start = parts[1].split(": ");
+                String[] end = parts[2].split(": ");
+                if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                    LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
+                    LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
+                    if (endDateTime.isAfter(startDateTime)) { //Ai-Assisted: ChatGPT, for error handling
+                        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
+                        if (this.taskList.hasDuplicate(event)) {
+                            return this.ui.duplicateTasks();
+                        } else {
+                            this.taskList.add(event);
+                            this.storage.appendFile(event);
+                            return this.ui.add(event);
+                        }
+                    } else {
+                        return this.ui.endBeforeStart();
+                    }
+                } else {
+                    return this.ui.invalidDate();
+                }
+            } else {
+                return this.ui.invalidEvent();
+            }
+        } else {
+            return this.ui.noTaskDesc();
+        }
+    }
+
+    /**
+     * Checks if the find command is valid, and executes it if valid
+     * Returns messages to show the success or failure.
+     *
+     * @param input the find command input
+     * @return a list of the tasks that match the search keyword if the command is valid,
+     * else an error message
+     */
+    public String handleFind(String input) {
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.isFindValid(input)) {
+            String keyword = words[1].trim();
+            return this.ui.find(keyword);
+        } else {
+            return this.ui.invalidFind();
+        }
+    }
+
+    /**
+     * Checks if the schedule command is valid, and executes it if valid
+     * Returns messages to show the success or failure.
+     *
+     * @param input the schedule command input
+     * @return a list of the tasks that match the search date if the command is valid,
+     * else an error message
+     */
+    public String handleSchedule(String input) {
+        String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
+        if (this.isScheduleValid(input)) {
+            return this.ui.schedule(words[1].trim());
+        } else {
+            return this.ui.invalidSchedule();
         }
     }
 
@@ -366,5 +416,6 @@ public class Parser {
             }
         }
     }
+
 }
 
