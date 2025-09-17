@@ -57,7 +57,7 @@ public class Parser {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
         switch (words[0]) {
             case "list":
-                if (input.equals("list")) {
+                if (input.trim().equals("list")) {
                     return this.ui.list();
                 }
                 break;
@@ -92,14 +92,13 @@ public class Parser {
      */
     public String handleMark(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasValidTaskNum(input)) {
-            int taskNum = Integer.parseInt(words[1]);
-            this.taskList.mark(taskNum);
-            storage.modifyFile(this.taskList);
-            return this.ui.mark(taskNum);
-        } else {
+        if (!this.hasValidTaskNum(input)) {
             return this.ui.invalidTaskNum();
         }
+        int taskNum = Integer.parseInt(words[1].trim());
+        this.taskList.mark(taskNum);
+        storage.modifyFile(this.taskList);
+        return this.ui.mark(taskNum);
     }
 
     /**
@@ -111,14 +110,13 @@ public class Parser {
      */
     public String handleUnmark(String input){
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasValidTaskNum(input)) {
-            int taskNum = Integer.parseInt(words[1]);
-            this.taskList.unmark(taskNum);
-            storage.modifyFile(this.taskList);
-            return this.ui.unmark(taskNum);
-        } else {
+        if (!this.hasValidTaskNum(input)) {
             return this.ui.invalidTaskNum();
         }
+        int taskNum = Integer.parseInt(words[1].trim());
+        this.taskList.unmark(taskNum);
+        storage.modifyFile(this.taskList);
+        return this.ui.unmark(taskNum);
     }
 
     /**
@@ -129,17 +127,15 @@ public class Parser {
      */
     public String handleDelete(String input){
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasValidTaskNum(input)) {
-            int taskNum = Integer.parseInt(words[1]);
-
-            String message = this.ui.delete(taskNum);
-            this.taskList.delete(taskNum);
-            message = message + "\n" + this.ui.taskCount();
-            storage.modifyFile(this.taskList);
-            return message;
-        } else {
+        if (!this.hasValidTaskNum(input)) {
             return this.ui.invalidTaskNum();
         }
+        int taskNum = Integer.parseInt(words[1].trim());
+        String message = this.ui.delete(taskNum);
+        this.taskList.delete(taskNum);
+        message = message + "\n" + this.ui.taskCount();
+        storage.modifyFile(this.taskList);
+        return message;
     }
 
     /**
@@ -151,18 +147,16 @@ public class Parser {
      */
     public String handleTodo(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasName(input)) {
-            Todo todo = new Todo(words[1].trim());
-            if (this.taskList.hasDuplicate(todo)) {
-                return this.ui.duplicateTasks();
-            } else {
-                this.taskList.add(todo);
-                this.storage.appendFile(todo);
-                return this.ui.add(todo);
-            }
-        } else {
+        if (!this.isTodoValid(input)) {
             return this.ui.noTaskDesc();
         }
+        Todo todo = new Todo(words[1].trim());
+        if (this.taskList.hasDuplicate(todo)) {
+            return this.ui.duplicateTasks();
+        }
+        this.taskList.add(todo);
+        this.storage.appendFile(todo);
+        return this.ui.add(todo);
     }
 
     /**
@@ -171,35 +165,25 @@ public class Parser {
      * an error message.
      *
      * @param input the description and deadline string
-     * @return a confirmation message if valid, else an invalid date message
      */
     public String handleDeadline(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasName(input)) {
-            if (this.isDeadlineValid(input)) {
-                String[] parts = words[1].split("/"); //split after the /
-                String[] time = parts[1].split(": ");
-                if (this.isDateValid(time[1])) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                    LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
-                    Deadline deadline = new Deadline(parts[0].trim(), endDateTime);
-
-                    if (this.taskList.hasDuplicate(deadline)) {
-                        return this.ui.duplicateTasks();
-                    } else {
-                        this.taskList.add(deadline);
-                        this.storage.appendFile(deadline);
-                        return this.ui.add(deadline);
-                    }
-                } else {
-                    return this.ui.invalidDate();
-                }
-            } else {
-                return this.ui.invalidDeadline();
-            }
-        } else {
-            return this.ui.noTaskDesc();
+        if (!this.isDeadlineValid(input)) {
+            return this.ui.invalidDeadline();
         }
+        String[] time = words[1].split("/by:");
+        if (!this.isDateValid(time[1].trim())) {
+            return this.ui.invalidDate();
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+        Deadline deadline = new Deadline(time[0].trim(), endDateTime);
+        if (this.taskList.hasDuplicate(deadline)) {
+            return this.ui.duplicateTasks();
+        }
+        this.taskList.add(deadline);
+        this.storage.appendFile(deadline);
+        return this.ui.add(deadline);
     }
 
     /**
@@ -210,38 +194,29 @@ public class Parser {
      * @param input the description and event time range
      * @return a confirmation message if valid, else an invalid date message
      */
-    public String handleEvent(String input){
+    public String handleEvent(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.hasName(input)) {
-            if (this.isEventValid(input)) {
-                String[] parts = words[1].split("/"); //split after the /
-                String[] start = parts[1].split(": ");
-                String[] end = parts[2].split(": ");
-                if (this.isDateValid(end[1]) && this.isDateValid(start[1].stripTrailing())) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-                    LocalDateTime endDateTime = LocalDateTime.parse(end[1].trim(), formatter);
-                    LocalDateTime startDateTime = LocalDateTime.parse(start[1].trim(), formatter);
-                    if (endDateTime.isAfter(startDateTime)) { //Ai-Assisted: ChatGPT, for error handling
-                        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
-                        if (this.taskList.hasDuplicate(event)) {
-                            return this.ui.duplicateTasks();
-                        } else {
-                            this.taskList.add(event);
-                            this.storage.appendFile(event);
-                            return this.ui.add(event);
-                        }
-                    } else {
-                        return this.ui.endBeforeStart();
-                    }
-                } else {
-                    return this.ui.invalidDate();
-                }
-            } else {
-                return this.ui.invalidEvent();
-            }
-        } else {
-            return this.ui.noTaskDesc();
+        if (!this.isEventValid(input)) {
+            return this.ui.invalidEvent();
         }
+        String[] parts = words[1].split("/from:");
+        String[] time = parts[1].split("/to:");
+        if (!this.isDateValid(time[0].trim()) | !this.isDateValid(time[1].trim())) {
+            return this.ui.invalidDate();
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime endDateTime = LocalDateTime.parse(time[1].trim(), formatter);
+        LocalDateTime startDateTime = LocalDateTime.parse(time[0].trim(), formatter);
+        if (!endDateTime.isAfter(startDateTime)) { //Ai-Assisted: ChatGPT, for error handling, was modified to fit
+            return this.ui.endBeforeStart();
+        }
+        Event event = new Event(parts[0].trim(), endDateTime, startDateTime);
+        if (this.taskList.hasDuplicate(event)) {
+            return this.ui.duplicateTasks();
+        }
+        this.taskList.add(event);
+        this.storage.appendFile(event);
+        return this.ui.add(event);
     }
 
     /**
@@ -254,12 +229,11 @@ public class Parser {
      */
     public String handleFind(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.isFindValid(input)) {
-            String keyword = words[1].trim();
-            return this.ui.find(keyword);
-        } else {
+        if (!this.isFindValid(input)) {
             return this.ui.invalidFind();
         }
+        String keyword = words[1].trim();
+        return this.ui.find(keyword);
     }
 
     /**
@@ -272,11 +246,10 @@ public class Parser {
      */
     public String handleSchedule(String input) {
         String[] words = input.split(" ", 2); //splits into 2 parts(1st word and the rest)
-        if (this.isScheduleValid(input)) {
-            return this.ui.schedule(words[1].trim());
-        } else {
+        if (!this.isScheduleValid(input)) {
             return this.ui.invalidSchedule();
         }
+        return this.ui.schedule(words[1].trim());
     }
 
     /**
@@ -287,17 +260,13 @@ public class Parser {
      */
     public boolean hasValidTaskNum(String input) {
         assert input != null : "Input to check cannot be null";
-        String[] words = input.split(" ");
+        String[] words = input.split(" ", 2);
         if (words.length == 1) {
             return false;
         } else {
             try {
-                int taskNum = Integer.parseInt(words[1]); //converts the number string to int
-                if (taskList.taskCount() < taskNum || taskNum < 1) {
-                    return false;
-                } else {
-                    return true;
-                }
+                int taskNum = Integer.parseInt(words[1].trim()); //converts the number string to int
+                return taskList.taskCount() >= taskNum && taskNum >= 1;
             } catch (NumberFormatException e) {
                 return false;
             }
@@ -310,14 +279,14 @@ public class Parser {
      * @param input the command string
      * @return true if valid, else false
      */
-    public boolean hasName(String input) {
+    public boolean isTodoValid(String input) {
         assert input != null : "Input to check cannot be null";
-        String[] words = input.split(" ");
-        if (words.length == 1) {
+        String[] words = input.split(" ", 2);
+        if (words.length == 1) { //no spaces at all
             return false;
-        } else {
-            return true;
         }
+        String taskName = words[1].trim();
+        return !taskName.isEmpty();
     }
 
     /**
@@ -329,12 +298,15 @@ public class Parser {
     public boolean isDeadlineValid(String input) {
         assert input != null : "Input to check cannot be null";
         String[] split = input.split(" ", 2);
-        String[] split2nd = split[1].split("/", 2); // "task" "/by: date/time"
-        if (split2nd.length == 1) {
+        if (split.length != 2) {
             return false;
-        } else {
-            return true;
         }
+        String taskName = split[1].trim();
+        if (taskName.isEmpty()) {
+            return false;
+        }
+        String[] split2nd = split[1].split("/by:");
+        return split2nd.length == 2;
     }
 
     /**
@@ -345,18 +317,14 @@ public class Parser {
      */
     public boolean isEventValid (String input) {
         assert input != null : "Input to check cannot be null";
-        String[] words = input.split(" ", 2);
-        String[] parts = words[1].split("/"); //split after the /
-        if (parts.length < 3) {
+        String[] split = input.split(" ", 2);
+        String[] split2nd = split[1].split("/from:");
+        String taskName = split2nd[0].trim();
+        if (split2nd.length != 2 || taskName.isEmpty()) {
             return false;
         } else {
-            String[] start = parts[1].split(" ", 2);
-            String[] end = parts[2].split(" ", 2);
-            if (start.length < 2 || end.length < 2) {
-                return false;
-            } else {
-                return true;
-            }
+            String[] split3rd = split2nd[1].split("/to:");
+            return split3rd.length == 2;
         }
     }
 
@@ -388,9 +356,9 @@ public class Parser {
         String[] words = input.split(" ", 2);
         if (words.length == 1) {
             return false;
-        } else {
-            return true;
         }
+        String keyword = words[1].trim();
+        return !keyword.isEmpty();
     }
 
     /**
@@ -403,8 +371,11 @@ public class Parser {
     public boolean isScheduleValid(String input) {
         assert input != null : "Date to view schedule by cannot be null";
         String[] words = input.split(" ", 2);
-        String date = words[1].trim();
         if (words.length == 1) {
+            return false;
+        }
+        String date = words[1].trim();
+        if (date.isEmpty()) {
             return false;
         } else {
             try {

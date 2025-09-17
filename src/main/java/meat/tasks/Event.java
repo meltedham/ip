@@ -44,7 +44,7 @@ public class Event extends Deadline {
      */
     @Override
     public String toString() {
-        return type() + marked() + " " + name() + "(from: " + this.start() + " " + "to: " + end() + ")";
+        return type() + marked() + " " + name() + " (from: " + this.start() + " " + "to: " + end() + ")";
     }
 
     /**

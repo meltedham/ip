@@ -109,8 +109,8 @@ public class Ui {
      * @return A String representing an invalid deadline error message
      */
     public String invalidDeadline() {
-        return ":( Invalid syntax for the end date and time of the deadline :(\n"
-            + "Enter: deadline <description> /by DD.MM.YYYY hh:mm";
+        return "Invalid syntax for the deadline command :(\n"
+            + "Enter: deadline <description> /by: DD.MM.YYYY hh:mm";
     }
 
     /** Informs the user of invalid event syntax.
@@ -118,8 +118,8 @@ public class Ui {
      * @return A String representing an invalid event error message
      */
     public String invalidEvent() {
-        return ":( Invalid syntax for the start and end date and time of the event :(\n"
-            + "Enter: event <description> /from DD.MM.YYYY hh:mm /to DD.MM.YYYY hh:mm";
+        return "Invalid syntax for the event command :(\n"
+            + "Enter: event <description> /from: DD.MM.YYYY hh:mm /to: DD.MM.YYYY hh:mm";
     }
 
     /** Informs the user of invalid date/time format.
@@ -127,7 +127,7 @@ public class Ui {
      * @return A String representing an invalid date error message
      */
     public String invalidDate() {
-        return ":( Invalid syntax for date/time :(\n"
+        return "Invalid syntax for date/time :(\n"
                 + "Enter: day.month.year hours: minutes - DD.MM.YYYY hh:mm";
     }
 
@@ -136,10 +136,11 @@ public class Ui {
      * @return A String representing all the valid commands
      */
     public String commands() {
-        return ":( Not a valid command :(. Commands:\n"
+        return "Not a valid command :(. Commands:\n"
                 + "list\n" + "mark/unmark/delete <task number>\n"
-                + "todo <description>\n" + "deadline <description> /by DD.MM.YYYY hh:mm\n"
-                + "event <description> /from DD.MM.YYYY hh:mm /to DD.MM.YYYY hh:mm\n";
+                + "todo <description>\n" + "deadline <description> /by: DD.MM.YYYY hh:mm\n"
+                + "event <description> /from: DD.MM.YYYY hh:mm /to: DD.MM.YYYY hh:mm\n"
+                + "find <keyword>\n" + "schedule DD.MM.YYYY\n" + "bye";
     }
 
     /**
@@ -177,7 +178,7 @@ public class Ui {
      * @return A String representing an invalid schedule command
      */
     public String invalidSchedule() {
-        return "Date provided to view schedule is in the wrong format :(\n" + "Enter: schedule DD.MM.YYYY";
+        return "Invalid syntax for the schedule command :(\n" + "Enter: schedule DD.MM.YYYY";
     }
 
     public String endBeforeStart() {

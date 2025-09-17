@@ -43,7 +43,7 @@ public class Deadline extends Todo {
      */
     @Override
     public String toString() {
-        return type() + marked() + " " + name() + "(by: " + this.end() + ")";
+        return type() + marked() + " " + name() + " (by: " + this.end() + ")";
     }
 
     /**
