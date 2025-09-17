@@ -179,5 +179,13 @@ public class Ui {
     public String invalidSchedule() {
         return "Date provided to view schedule is in the wrong format :(\n" + "Enter: schedule DD.MM.YYYY";
     }
+
+    public String endBeforeStart() {
+        return "The end date/time must be after the start date/time :(";
+    }
+
+    public String duplicateTasks() {
+        return "Cannot add task, task already exists in the list :(";
+    }
 }
 

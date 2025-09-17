@@ -1,5 +1,6 @@
 package meat.filestorage;
 
+import meat.inputoutput.Ui;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,11 +23,13 @@ public class StorageTest {
 
     /** Path to file created for testing. */
     private static final String TEST_FILE = "test_storage.txt";
+    private final Tasklist taskList = new Tasklist();
+    private Ui ui = new Ui(taskList);
 
     /** Tests creating and clearing of a file. */
     @Test
     void testCreateClearFile() throws IOException {
-        Storage storage = new Storage(TEST_FILE);
+        Storage storage = new Storage(TEST_FILE, ui);
         storage.createActualFile();
 
         File file = new File(TEST_FILE);
@@ -43,11 +46,11 @@ public class StorageTest {
      */
     @Test
     void testWriteFileFileToList() throws IOException {
-        Storage storage = new Storage(TEST_FILE);
+        Storage storage = new Storage(TEST_FILE, ui);
         storage.clearFile();
 
         Todo todo = new Todo("Read Book");
-        storage.writeFile(todo);
+        storage.appendFile(todo);
 
         Tasklist tasklist = new Tasklist();
         storage.fileToList(tasklist);
@@ -63,7 +66,7 @@ public class StorageTest {
      */
     @Test
     void testAppendFile() throws IOException {
-        Storage storage = new Storage(TEST_FILE);
+        Storage storage = new Storage(TEST_FILE, ui);
         storage.clearFile();
 
         Todo todo1 = new Todo("Task 1");
@@ -86,7 +89,7 @@ public class StorageTest {
      */
     @Test
     void testModifyFile() throws IOException {
-        Storage storage = new Storage(TEST_FILE);
+        Storage storage = new Storage(TEST_FILE, ui);
         storage.clearFile();
 
         ArrayList<Task> tasks = new ArrayList<>();

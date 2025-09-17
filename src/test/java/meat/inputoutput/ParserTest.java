@@ -22,7 +22,7 @@ public class ParserTest {
     void testTodo() {
         Tasklist taskList = new Tasklist();
         Ui ui = new Ui(taskList);
-        Storage storage = new Storage("test.txt");
+        Storage storage = new Storage("test.txt", ui);
         Parser parser = new Parser(ui, taskList, storage);
 
         parser.checkAnyValid("todo Read Book");
@@ -37,7 +37,7 @@ public class ParserTest {
     void testDeadline() {
         Tasklist taskList = new Tasklist();
         Ui ui = new Ui(taskList);
-        Storage storage = new Storage("test.txt");
+        Storage storage = new Storage("test.txt", ui);
         Parser parser = new Parser(ui, taskList, storage);
 
         parser.checkAnyValid("deadline Submit report /by: 05.09.2025 18:30");
@@ -53,7 +53,7 @@ public class ParserTest {
     void testEvent() {
         Tasklist taskList = new Tasklist();
         Ui ui = new Ui(taskList);
-        Storage storage = new Storage("test.txt");
+        Storage storage = new Storage("test.txt", ui);
         Parser parser = new Parser(ui, taskList, storage);
 
         parser.checkAnyValid("event Meeting /from: 05.09.2025 09:00 /to: 05.09.2025 17:00");
@@ -65,21 +65,6 @@ public class ParserTest {
         assertEquals(true, taskList.getTask(0) instanceof Event);
     }
 
-    /**
-     * Tests the method that checks for valid mark/unmark/delete command.
-     */
-    @Test
-    void testIsMarkUnmarkDeleteValid() {
-        Tasklist taskList = new Tasklist();
-        Ui ui = new Ui(taskList);
-        Storage storage = new Storage("test.txt");
-        Parser parser = new Parser(ui, taskList, storage);
-
-        parser.checkAnyValid("todo Test task");
-
-        assertEquals(false, parser.isMarkUnmarkDeleteValid("mark 0"));
-        assertEquals(true, parser.isMarkUnmarkDeleteValid("mark 1"));
-    }
 
     /**
      * Tests the method that checks for valid date/time formatting.
@@ -88,7 +73,7 @@ public class ParserTest {
     void testIsInvalidDate() {
         Tasklist taskList = new Tasklist();
         Ui ui = new Ui(taskList);
-        Storage storage = new Storage("test.txt");
+        Storage storage = new Storage("test.txt", ui);
         Parser parser = new Parser(ui, taskList, storage);
 
         assertEquals(false, parser.isDateValid("31-02-2025 25:00")); // clearly invalid

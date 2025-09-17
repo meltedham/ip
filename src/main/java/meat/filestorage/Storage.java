@@ -1,5 +1,6 @@
 package meat.filestorage;
 
+import meat.inputoutput.Ui;
 import meat.tasks.Tasklist;
 import meat.tasks.Deadline;
 import meat.tasks.Event;
@@ -14,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -33,16 +33,19 @@ public class Storage {
     /** Path to the storage file. */
     private String path;
 
+    private Ui ui;
+
     /**
      * Constructs a Storage for the given path.
      *
      * @param path the file path to store tasks
      */
-    public Storage(String path)
+    public Storage(String path, Ui ui)
     {
         assert path != null : "Path for Storage cannot be null";
         this.path = path;
         this.file = new File(this.path);
+        this.ui = ui;
     }
 
     /** Creates the actual file if it does not exist. */
@@ -51,23 +54,6 @@ public class Storage {
             this.file.createNewFile();
         } catch (IOException e) {
             System.out.println("File could not be created");
-        }
-    }
-
-    /**
-     * Writes a task to the file, overwriting any existing content.
-     *
-     * @param task the task to write
-     */
-    public void writeFile(Task task) {
-        assert task != null : "Task to write to file cannot be null";
-        try {
-            String textToAdd = task.toFile();
-            FileWriter fileWriter = new FileWriter(this.path);
-            fileWriter.write(textToAdd + "\n");
-            fileWriter.close();
-        } catch (IOException e) {
-            System.out.println("Couldn't add text to file: " + e.getMessage());
         }
     }
 
@@ -128,18 +114,14 @@ public class Storage {
                 switch (details.length) {
                     case 3: //Todo
                         Todo todo = new Todo(details[2]);
-                        if (details[1].equals("[X]")) {
-                            todo.mark();
-                        }
+                        mark(details[1], todo);
                         taskList.add(todo);
                         break;
                     case 4: //Deadline
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
                         LocalDateTime endDateTime = LocalDateTime.parse(details[3], formatter);
                         Deadline deadline = new Deadline(details[2], endDateTime);
-                        if (details[1].equals("[X]")) {
-                            deadline.mark();
-                        }
+                        mark(details[1], deadline);
                         taskList.add(deadline);
                         break;
                     case 5: //Event
@@ -147,9 +129,7 @@ public class Storage {
                         LocalDateTime end = LocalDateTime.parse(details[3], format);
                         LocalDateTime start = LocalDateTime.parse(details[4], format);
                         Event event = new Event(details[2], end, start);
-                        if (details[1].equals("[X]")) {
-                            event.mark();
-                        }
+                        mark(details[1], event);
                         taskList.add(event);
                         break;
                     default:
@@ -162,4 +142,39 @@ public class Storage {
         }
     }
 
+    /**
+     * Checks if a task should be marked as done, based on the input
+     *
+     * @param input the string which indicates if the task should be marked as done
+     */
+    public void mark(String input, Task task) {
+        if (input.equals("[X]")) {
+            task.mark();
+        }
+    }
+
+    //Ai-Assisted: ChatGPT, created this method for error handling, which was modified for use
+    /**
+     * Checks if the storage file can be accessed for reading or writing.
+     * Prints an error message if access is denied.
+     *
+     * @return an error message String if the file is unaccessible, else a greeting message from Ui
+     */
+    public String validateFileAccess() {
+        try {
+            if (!this.file.exists()) {
+                return "Error: File does not exist: " + file.getPath();
+            }
+            if (!this.file.canRead()) {
+                return "Error: File cannot be read: " + file.getPath();
+            }
+            if (!this.file.canWrite()) {
+                return "Error: File cannot be written: " + file.getPath();
+            } else {
+                return ui.start("Meat");
+            }
+        } catch (SecurityException e) {
+            return "Error: Access to file denied due to security restrictions: " + file.getPath();
+        }
+    }
 }
