@@ -22,6 +22,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
+            stage.setTitle("Meat");
             stage.setMinHeight(220);
             stage.setMinWidth(417);
             // stage.setMaxWidth(417); // Add this if you didn't automatically resize elements
