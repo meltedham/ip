@@ -2,6 +2,8 @@ package meat.tasks;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * JUnit test class for the Todo class.
@@ -40,5 +42,24 @@ public class TodoTest {
 
         assertEquals(expectedString, todo.toString());
         assertEquals(expectedFile, todo.toFile());
+    }
+
+    /** Tests if a Todo task contains a keyword. */
+    @Test
+    void testHasKeyword() {
+        Todo todo = new Todo("Read book");
+
+        assertTrue(todo.hasKeyword("Read"));
+        assertTrue(todo.hasKeyword("book"));
+        assertFalse(todo.hasKeyword("Walk"));
+    }
+
+    /** Tests that onDate always returns false for a Todo. */
+    @Test
+    void testOnDate() {
+        Todo todo = new Todo("Read book");
+
+        assertFalse(todo.onDate("05.09.2025"));
+        assertFalse(todo.onDate("01.01.2000"));
     }
 }
